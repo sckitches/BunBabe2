@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Hospital 🏥 – BunBabe</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hospital-hero {
+            background: linear-gradient(135deg, #fde8ee, #fff8f9);
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+        .clinic-grid {
+            max-width: 1000px;
+            margin: 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 1.5rem;
+        }
+        .clinic-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            border: 2px solid var(--pink-light);
+            text-align: center;
+        }
+        .clinic-icon { font-size: 4rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a class="logo" href="index.html">BunBabe</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="care.html" class="active">Care Center</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="hospital-hero">
+            <h1 style="font-family:'Pacifico',cursive;">Bunny Hospital 👨‍⚕️🧶</h1>
+            <p>Give your well-loved cuties a spa day or a quick repair!</p>
+        </section>
+
+        <section class="clinic-grid">
+            <div class="clinic-card">
+                <div class="clinic-icon">🧼</div>
+                <h3>The Spa Scrub</h3>
+                <p>Gentle deep cleaning for dusty ears and paws. $15</p>
+                <button class="btn btn-sm mt-3" onclick="window.location.href='contact.html'">Book Appointment</button>
+            </div>
+            <div class="clinic-card">
+                <div class="clinic-icon">🧶</div>
+                <h3>Emergency Stitches</h3>
+                <p>Fixing loose threads, seam pops, or missing limbs. $10+</p>
+                <button class="btn btn-sm mt-3" onclick="window.location.href='contact.html'">Emergency Ward</button>
+            </div>
+            <div class="clinic-card">
+                <div class="clinic-icon">☁️</div>
+                <h3>Super-Plumping</h3>
+                <p>Restore that "new bunny" squish with fresh premium stuffing. $12</p>
+                <button class="btn btn-sm mt-3" onclick="window.location.href='contact.html'">Get Fluffy</button>
+            </div>
+        </section>
+
+        <section class="container text-center" style="margin-bottom:5rem;">
+            <h2>DIY First Aid 🩹</h2>
+            <p>Washing your crochet item at home? Follow these golden rules:</p>
+            <div style="max-width:600px; margin:2rem auto; text-align:left; background:var(--pink-light); padding:2rem; border-radius:24px;">
+                <p>• <strong>Hand wash only:</strong> Use cool water and mild soap.</p>
+                <p>• <strong>No wringing:</strong> Gently press out water with a towel.</p>
+                <p>• <strong>Air dry:</strong> Lay flat in a shaded area. Never use a dryer!</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 BunBabe Bunny Hospital. All rights reserved.</p>
+    </footer>
+    <script src="cart.js"></script>
+    <script src="features.js"></script>
+</body>
+</html>

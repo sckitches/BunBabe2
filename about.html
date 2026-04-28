@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About – BunBabe 🧶</title>
+    <meta name="description" content="Learn about BunBabe, a handmade crochet shop crafting cuties with love." />
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .about-hero {
+            background: radial-gradient(ellipse at 30% 50%, #ffe4ea 0%, var(--cream) 65%);
+            padding: 4rem 1.5rem 2rem;
+            text-align: center;
+        }
+
+        .about-hero h2 {
+            margin-bottom: 0.4rem;
+        }
+
+        .about-tagline {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .about-grid {
+            max-width: 860px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        @media (max-width: 600px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .about-image-block {
+            background: var(--pink-light);
+            border: 2px solid var(--pink);
+            border-radius: var(--radius);
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .about-image-block .big-emoji {
+            font-size: 5rem;
+            line-height: 1;
+            animation: bob 3s ease-in-out infinite;
+        }
+
+        @keyframes bob {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+
+            50% {
+                transform: translateY(-8px) rotate(3deg);
+            }
+        }
+
+        .about-image-block p {
+            font-size: 0.9rem;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .about-text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .about-text-block .card {
+            padding: 1.5rem;
+        }
+
+        .about-text-block .card h3 {
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
+        }
+
+        .values-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+        }
+
+        .values-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="BunBabe Logo">
+            BunBabe
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a class="nav-cart" onclick="toggleCart()">
+            🛒 <span class="cart-badge">0</span>
+        </a>
+    </nav>
+
+
+    <main>
+        <section class="about-hero">
+            <h2>About BunBabe 🐰</h2>
+            <p class="about-tagline">Tiny stitches, big love.</p>
+        </section>
+
+        <div class="dots-row">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="about-grid">
+            <!-- Illustration block -->
+            <div class="about-image-block">
+                <span class="big-emoji">🧶</span>
+                <p>Every piece starts here — with yarn, hooks, and heaps of love.</p>
+            </div>
+
+            <!-- Text blocks -->
+            <div class="about-text-block">
+                <div class="card">
+                    <h3>✨ Our Story</h3>
+                    <p>
+                        BunBabe was born out of a love for all things soft, sweet, and handmade.
+                        What started as a cozy hobby quickly grew into a little shop full of crochet
+                        cuties — each one made with patience, joy, and a whole lot of heart.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>💗 Our Promise</h3>
+                    <p>
+                        Every item you order is made by hand, just for you. No factories, no rush —
+                        only careful stitches and genuine care in every creation.
+                    </p>
+                    <ul class="values-list mt-2">
+                        <li>🐰 100% handmade, never mass-produced</li>
+                        <li>🌸 High-quality, soft yarn materials</li>
+                        <li>📦 Packed with love in every order</li>
+                        <li>💌 Custom orders always welcome</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <span>© 2026 BunBabe.</span> All rights reserved. Made with 💗
+    </footer>
+
+    <script src="cart.js"></script>
+    <script src="features.js"></script>
+
+    <!-- ── Cart Drawer ── -->
+    <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+    <div id="cartDrawer" class="cart-drawer">
+        <div class="cart-header">
+            <h3>Your Cart 🛍️</h3>
+            <span class="cart-close" onclick="closeCart()">&times;</span>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <!-- Items injected by JS -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <span>Total:</span>
+                <span id="cartTotal">GH₵ 0</span>
+            </div>
+            <button class="btn cart-checkout-btn" onclick="checkout()">Proceed to Checkout ✨</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        style="display:none; position:fixed; bottom:20px; right:20px; background:var(--pink-dark); color:white; padding:15px 25px; border-radius:12px; font-weight:700; z-index:2000; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+    </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+</body>
+
+</html>

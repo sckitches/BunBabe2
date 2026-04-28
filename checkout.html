@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout – BunBabe 🧶</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .checkout-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 5rem;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 850px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkout-section {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .checkout-section h3 {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--pink-dark);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        input, select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--pink-light);
+            border-radius: 12px;
+            background: var(--cream);
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus {
+            border-color: var(--pink-dark);
+        }
+
+        /* Toggle Button Group */
+        .toggle-group {
+            display: flex;
+            background: var(--pink-light);
+            padding: 4px;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: none;
+            background: none;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-light);
+        }
+
+        .toggle-btn.active {
+            background: var(--white);
+            color: var(--pink-dark);
+            box-shadow: 0 2px 10px rgba(245, 159, 176, 0.2);
+        }
+
+        /* Order Summary */
+        .summary-card {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .summary-total {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 2px dashed var(--pink-light);
+            font-size: 1.3rem;
+            font-weight: 800;
+            font-family: 'Pacifico', cursive;
+            color: var(--pink-dark);
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-light);
+        }
+
+        .cc-icon {
+            font-size: 1.2rem;
+            margin-left: auto;
+        }
+
+        #address-section {
+            transition: all 0.3s;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--white);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-bunny {
+            font-size: 6rem;
+            margin-bottom: 1.5rem;
+            animation: success-pop 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
+        }
+
+        @keyframes success-pop {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="BunBabe Logo">
+            BunBabe
+        </a>
+        <ul class="nav-links">
+            <li><a href="shop.html">Back to Shop</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="container" style="padding-bottom: 0;">
+            <h2 class="text-center">Finalize Your Order 🎀</h2>
+            <p class="text-center">Almost there! Just a few details before we start stitching.</p>
+        </div>
+
+        <div class="checkout-container">
+            <!-- Left Side: Form -->
+            <div class="checkout-form">
+                
+                <div class="toggle-group">
+                    <button class="toggle-btn active" id="deliveryBtn" onclick="setMethod('delivery')">🚚 Delivery</button>
+                    <button class="toggle-btn" id="pickupBtn" onclick="setMethod('pickup')">🏠 Pickup</button>
+                </div>
+
+                <div class="checkout-section">
+                    <h3>👤 Contact Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="firstName" placeholder="Bunny" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="lastName" placeholder="Babe" required>
+                        </div>
+                        <div class="form-group full">
+                            <label>Email Address</label>
+                            <input type="email" id="email" placeholder="you@love.com" required>
+                        </div>
+                        <div class="form-group full">
+                            <label>Phone Number (WhatsApp)</label>
+                            <input type="tel" id="phone" placeholder="+233..." required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-section" id="address-section">
+                    <h3>📍 Delivery Address</h3>
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label>Street Address</label>
+                            <input type="text" id="address" placeholder="123 Pastel Lane">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="city" placeholder="Accra">
+                        </div>
+                        <p>How would you like to receive your cute items?</p>
+                        <div class="method-selector" id="method-selector">
+                            <button class="method-btn active" id="deliveryBtn" onclick="setMethod('delivery')">
+                                🚚 Delivery 
+                                <span>Takes 2-3 days</span>
+                            </button>
+                            <button class="method-btn" id="pickupBtn" onclick="setMethod('pickup')">
+                                🏠 Pickup
+                                <span>Ready in 24h</span>
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <label>Region</label>
+                            <select id="region">
+                                <option>Greater Accra</option>
+                                <option>Ashanti</option>
+                                <option>Western</option>
+                                <option>Central</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-section">
+                    <h3>💳 Payment Details <span class="cc-icon">🔒</span></h3>
+                    
+                    <div class="toggle-group" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
+                        <button class="toggle-btn active" id="payCardBtn" onclick="setPaymentMethod('card')">💳 Credit Card</button>
+                        <button class="toggle-btn" id="payCashBtn" onclick="setPaymentMethod('cash')">💵 Cash</button>
+                    </div>
+
+                    <div id="card-payment-form" class="form-grid">
+                        <div class="form-group full">
+                            <label>Card Number</label>
+                            <input type="text" id="ccNum" placeholder="•••• •••• •••• ••••" maxlength="19">
+                        </div>
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" id="ccExp" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" id="ccCvv" placeholder="•••" maxlength="3">
+                        </div>
+                        <div class="form-group full">
+                            <p style="font-size: 0.75rem; color: var(--text-light); text-align: center;">🛡️ Your payment info is encrypted and never stored on our servers.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="cash-payment-form" class="form-grid" style="display: none;">
+                        <div class="form-group full">
+                            <p style="font-size: 0.95rem; color: #c62828; font-weight: 800; text-align: center; border: 2px dashed #ffcdd2; background: #ffebee; padding: 1.2rem; border-radius: 12px; line-height: 1.5;">
+                                ⚠️ IMPORTANT NOTICE ⚠️<br><br>
+                                By choosing cash, you agree that if the owners haven't received the money, you cannot leave or go with the items! No products will be handed over until full cash payment is confirmed in person.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Summary -->
+            <div class="summary-side">
+                <div class="summary-card">
+                    <h3>🛍️ Order Summary</h3>
+                    <div id="checkoutItems" style="margin-bottom: 1.5rem;">
+                        <!-- Items injected via JS -->
+                    </div>
+
+                    <!-- Coupon Section -->
+                    <div id="couponSection" style="margin-bottom:1rem;">
+                        <div id="couponAppliedBox" style="display:none; background:#e6f7ed; border:1.5px solid #a5d6a7; border-radius:10px; padding:0.7rem 1rem; display:none; justify-content:space-between; align-items:center; margin-bottom:0.8rem;">
+                            <span id="couponAppliedLabel" style="font-size:0.85rem; font-weight:800; color:#2e7d32;"></span>
+                            <button onclick="removeCouponCheckout()" style="background:none; border:none; cursor:pointer; color:#d32f2f; font-weight:800; font-size:0.8rem;">Remove ×</button>
+                        </div>
+                        <div id="couponInputBox" style="display:flex; gap:0.5rem;">
+                            <input id="couponCodeInput" type="text" placeholder="🎡 Enter coupon code..." style="flex:1; padding:0.6rem 0.9rem; border:2px solid var(--pink-light); border-radius:10px; font-family:inherit; font-size:0.88rem; background:var(--cream);" onkeydown="if(event.key==='Enter') applyCouponCheckout()">
+                            <button onclick="applyCouponCheckout()" style="background:var(--pink-dark); color:white; border:none; border-radius:10px; padding:0.6rem 1rem; font-weight:800; font-size:0.85rem; cursor:pointer; white-space:nowrap;">Apply 🎉</button>
+                        </div>
+                        <p style="font-size:0.72rem; color:var(--text-light); margin-top:0.4rem; text-align:center;">🎡 <a href="spin.html" style="color:var(--pink-dark); font-weight:700;">Spin the wheel</a> to win a coupon code!</p>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">GH₵ 0</span>
+                    </div>
+                    <div class="summary-row" id="discountRow" style="display:none; color:#2e7d32; font-weight:800;">
+                        <span>🎉 Discount</span>
+                        <span id="discountAmt"></span>
+                    </div>
+                    <div class="summary-row" id="deliveryRow">
+                        <span>Delivery Fee</span>
+                        <span id="deliveryFee">GH₵ 15</span>
+                    </div>
+                    <div class="summary-row" id="freeShipRow" style="display:none; color:#2e7d32; font-weight:800;">
+                        <span>📦 Shipping</span>
+                        <span>FREE!</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span id="grandTotal">GH₵ 0</span>
+                    </div>
+
+                    <button class="btn" style="width: 100%; margin-top: 1.5rem; font-size: 1.1rem; padding: 1rem;" onclick="placeOrder()">Place Order ✨</button>
+                    
+                    <p style="margin-top: 1rem; font-size: 0.8rem; text-align: center; color: var(--text-light);">
+                        By clicking "Place Order", you agree to BunBabe's cozy terms.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="successOverlay" class="success-overlay">
+        <div class="success-bunny">🐰✨</div>
+        <h2 style="font-family: 'Pacifico'; font-size: 3rem; color: var(--pink-dark);">Order Placed!</h2>
+        <p style="font-size: 1.2rem; max-width: 500px; margin: 1rem auto;">Thank you! Your handmade cuties are officially in the queue. We'll send a confirmation email shortly.</p>
+        <a href="index.html" class="btn mt-4">Back to Home 🏠</a>
+        <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-light);">Order ID: <span id="finalOrderId">#BUN-1234</span></p>
+    </div>
+
+    <footer>
+        <span>© 2026 BunBabe.</span> All rights reserved. Made with 💗
+    </footer>
+
+    <script src="db.js"></script>
+    <script src="cart.js"></script>
+    <script src="features.js"></script>
+    <script>
+        let shippingMethod = 'delivery';
+        const deliveryFeeVal = 15;
+        // cart and appliedCoupon are handled by cart.js
+        
+
+
+        async function initCheckout() {
+            // Auth guard — must be signed in
+            const session = JSON.parse(localStorage.getItem('bb_session') || 'null');
+            if (!session) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            if (cart.length === 0) { window.location.href = 'shop.html'; return; }
+            await syncCoupons(); // Ensure latest coupons are loaded
+            renderSummary();
+            syncCouponUI();
+            document.getElementById('ccNum').addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+            });
+            document.getElementById('ccExp').addEventListener('input', e => {
+                let v = e.target.value.replace(/[^\d]/g, '');
+                if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2,4);
+                e.target.value = v;
+            });
+        }
+
+        function applyCouponCheckout() {
+            const code = document.getElementById('couponCodeInput').value.trim().toUpperCase();
+            if (!code) { alert('Please enter a coupon code!'); return; }
+            if (COUPON_CODES[code]) {
+                appliedCoupon = code;
+                localStorage.setItem('bunbabe_coupon', JSON.stringify(code));
+                syncCouponUI();
+                renderSummary();
+            } else {
+                alert('❌ Invalid coupon code. Try again or spin the wheel!');
+            }
+        }
+
+        function removeCouponCheckout() {
+            appliedCoupon = null;
+            localStorage.removeItem('bunbabe_coupon');
+            syncCouponUI();
+            renderSummary();
+        }
+
+        function syncCouponUI() {
+            const applied = document.getElementById('couponAppliedBox');
+            const input   = document.getElementById('couponInputBox');
+            if (appliedCoupon && COUPON_CODES[appliedCoupon]) {
+                applied.style.display = 'flex';
+                input.style.display   = 'none';
+                document.getElementById('couponAppliedLabel').innerText = '✅ ' + COUPON_CODES[appliedCoupon].label;
+            } else {
+                applied.style.display = 'none';
+                input.style.display   = 'flex';
+            }
+        }
+
+        function setMethod(method) {
+            shippingMethod = method;
+            document.getElementById('deliveryBtn').classList.toggle('active', method === 'delivery');
+            document.getElementById('pickupBtn').classList.toggle('active',  method === 'pickup');
+            document.getElementById('address-section').style.opacity       = method === 'delivery' ? '1' : '0.3';
+            document.getElementById('address-section').style.pointerEvents = method === 'delivery' ? 'all' : 'none';
+            document.getElementById('deliveryRow').style.display            = method === 'delivery' ? 'flex' : 'none';
+            renderSummary();
+        }
+
+        let paymentMethodType = 'card';
+        function setPaymentMethod(type) {
+            paymentMethodType = type;
+            document.getElementById('payCardBtn').classList.toggle('active', type === 'card');
+            document.getElementById('payCashBtn').classList.toggle('active',  type === 'cash');
+            document.getElementById('card-payment-form').style.display = type === 'card' ? 'grid' : 'none';
+            document.getElementById('cash-payment-form').style.display = type === 'cash' ? 'grid' : 'none';
+        }
+
+        function renderSummary() {
+            const list     = document.getElementById('checkoutItems');
+            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+
+            // Check if all items are digital gift cards
+            const allDigital = cart.every(i => i.name.toLowerCase().includes('gift card'));
+            if (allDigital) {
+                shippingMethod = 'digital';
+                document.getElementById('method-selector').style.display = 'none';
+                document.getElementById('deliveryFee').innerText = 'Digital Delivery (Email)';
+            } else {
+                document.getElementById('method-selector').style.display = 'flex';
+            }
+
+            // Discount
+            const coupon   = appliedCoupon && COUPON_CODES[appliedCoupon];
+            const discount = coupon ? Math.round(subtotal * coupon.discount / 100) : 0;
+            const freeShip = (coupon && coupon.freeShip) || allDigital;
+            const shipping = (shippingMethod === 'delivery' && !freeShip) ? deliveryFeeVal : 0;
+            const total    = subtotal - discount + shipping;
+
+            list.innerHTML = cart.map(i => `
+                <div class="order-item">
+                    <span>${i.quantity}x ${i.name}</span>
+                    <span>GH₵ ${i.price * i.quantity}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('subtotal').innerText    = 'GH₵ ' + subtotal;
+            document.getElementById('grandTotal').innerText  = 'GH₵ ' + total;
+
+            // Discount row
+            const dRow = document.getElementById('discountRow');
+            if (discount > 0) {
+                dRow.style.display = 'flex';
+                document.getElementById('discountAmt').innerText = '-GH₵ ' + discount;
+            } else {
+                dRow.style.display = 'none';
+            }
+
+            // Free shipping row
+            document.getElementById('freeShipRow').style.display = freeShip ? 'flex' : 'none';
+            if (shippingMethod === 'delivery') {
+                document.getElementById('deliveryFee').innerText = freeShip ? 'FREE! 🎉' : 'GH₵ ' + deliveryFeeVal;
+            }
+        }
+
+        async function placeOrder() {
+            const first = document.getElementById('firstName').value;
+            const email = document.getElementById('email').value;
+            if (!first || !email) { alert('Please fill in your contact info! 🐰'); return; }
+
+            const orderNum = Math.floor(Math.random() * 9000) + 1000;
+            const subtotal  = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+            const coupon    = appliedCoupon && COUPON_CODES[appliedCoupon];
+            const discount  = coupon ? Math.round(subtotal * coupon.discount / 100) : 0;
+            const freeShip  = coupon ? coupon.freeShip : false;
+            const shipping  = (shippingMethod === 'delivery' && !freeShip) ? deliveryFeeVal : 0;
+            const total     = subtotal - discount + shipping;
+
+            const ccNum = document.getElementById('ccNum').value.trim();
+
+            const newOrder = {
+                id:           '#BUN-' + orderNum,
+                customerName: first + ' ' + document.getElementById('lastName').value,
+                total,
+                discount,
+                coupon:       appliedCoupon || 'None',
+                items:        cart.map(i => i.quantity + 'x ' + i.name).join(', '),
+                date:         new Date().toLocaleDateString(),
+                method:       shippingMethod,
+                paymentType:  paymentMethodType,
+                paymentStatus: (paymentMethodType === 'card' && ccNum) ? 'paid' : 'unpaid'
+            };
+
+            // Push to Real DB
+            await window.DATABASE.pushOrder(newOrder);
+
+            document.getElementById('finalOrderId').innerText = '#BUN-' + orderNum;
+            
+            // Add Confetti logic before showing the overlay
+            createConfetti();
+            
+            const overlay = document.getElementById('successOverlay');
+            overlay.style.display = 'flex';
+            
+            // Wait for the animation to finish, then redirect to the digital receipt!
+            setTimeout(() => {
+                window.location.href = `receipt.html?id=${encodeURIComponent('#BUN-' + orderNum)}`;
+            }, 3000);
+            
+            window.DATABASE.clearCart();
+            localStorage.removeItem('bunbabe_coupon');
+        }
+
+        // Quick confetti for extra "wow"
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const conf = document.createElement('div');
+                conf.innerText = ['🎀', '✨', '💖', '🧶'][Math.floor(Math.random() * 4)];
+                conf.style.position = 'fixed';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = '-50px';
+                conf.style.fontSize = Math.random() * 20 + 10 + 'px';
+                conf.style.zIndex = '2500';
+                conf.style.transition = 'top 3s ease-in, transform 3s ease-in';
+                document.body.appendChild(conf);
+                
+                setTimeout(() => {
+                    conf.style.top = '120vh';
+                    conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+                }, 50);
+                setTimeout(() => conf.remove(), 3000);
+            }
+        }
+
+        initCheckout();
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop – BunBabe 🧶</title>
+    <meta name="description"
+        content="Browse BunBabe's massive handmade crochet collection – 100+ plushies, keychains, flowers, hats, hoodies, bags and more!" />
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* ── Shop Hero ── */
+        .shop-hero {
+            background: radial-gradient(ellipse at 70% 30%, #ffe4ea 0%, var(--cream) 65%);
+            padding: 3rem 1.5rem 1rem;
+            text-align: center;
+        }
+        .shop-hero p { font-size: 1.05rem; margin-top: 0.3rem; }
+
+        /* ── Filter Sidebar + Grid Layout ── */
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 4rem;
+        }
+        @media (max-width: 768px) {
+            .shop-layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+        .sidebar h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-light);
+            margin: 1.2rem 0 0.6rem;
+        }
+        .sidebar h4:first-child { margin-top: 0; }
+        .cat-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-light);
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .cat-link:hover, .cat-link.active {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+        }
+        .cat-count {
+            margin-left: auto;
+            background: var(--cream);
+            font-size: 0.7rem;
+            padding: 1px 6px;
+            border-radius: 20px;
+        }
+        .price-range {
+            width: 100%;
+            accent-color: var(--pink-dark);
+        }
+        .sort-select {
+            width: 100%;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid var(--pink-light);
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--text);
+            background: var(--white);
+        }
+
+        /* ── Products Area ── */
+        .products-area { flex: 1; }
+        .products-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .products-count { font-size: 0.9rem; color: var(--text-light); font-weight: 700; }
+
+        /* ── Temu-Style Grid ── */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
+        }
+
+        /* ── Product Card ── */
+        .product-card {
+            background: var(--white);
+            border: 1.5px solid var(--pink-light);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.22s, box-shadow 0.22s;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(245, 159, 176, 0.35);
+        }
+        .product-img {
+            width: 100%;
+            aspect-ratio: 1;
+            background: var(--pink-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .product-card:hover .product-img { transform: scale(1.05); }
+        .product-body { padding: 0.8rem; flex: 1; display: flex; flex-direction: column; }
+        .product-name {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+            line-height: 1.3;
+        }
+
+        /* ── Ratings ── */
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-bottom: 0.4rem;
+        }
+        .stars { color: #f4c430; font-size: 0.75rem; }
+        .rating-count { font-size: 0.72rem; color: var(--text-light); }
+
+        /* ── Pricing ── */
+        .product-pricing { margin-bottom: 0.5rem; }
+        .price-now {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.1rem;
+            color: var(--pink-dark);
+        }
+        .price-was {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-left: 0.3rem;
+        }
+        .discount-tag {
+            display: inline-block;
+            background: #ff4757;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 5px;
+            border-radius: 4px;
+            margin-left: 0.3rem;
+        }
+
+        /* ── Sizes Preview ── */
+        .size-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .size-pill {
+            font-size: 0.65rem;
+            font-weight: 700;
+            border: 1px solid var(--pink-light);
+            border-radius: 4px;
+            padding: 2px 5px;
+            color: var(--text-light);
+        }
+
+        /* ── Color Swatches ── */
+        .color-swatches {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .color-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(0,0,0,0.1);
+        }
+
+        /* ── Stock Tag ── */
+        .stock-tag {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .stock-in { background: #e6f7ed; color: #2e7d32; }
+        .stock-low { background: #fff4e5; color: #ed6c02; }
+
+        /* ── Wishlist Btn ── */
+        .wishlist-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transition: transform 0.2s;
+            z-index: 5;
+        }
+        .wishlist-btn:hover { transform: scale(1.2); }
+        .wishlist-btn.active { color: #ff4757; }
+
+        /* ── Ribbon ── */
+        .ribbon {
+            position: absolute;
+            top: 12px;
+            left: 0;
+            background: linear-gradient(135deg, var(--pink-dark), #e88d9f);
+            color: white;
+            padding: 3px 10px 3px 8px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* ── Add to Cart ── */
+        .add-cart-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            cursor: pointer;
+            margin-top: auto;
+            transition: opacity 0.2s;
+        }
+        .add-cart-btn:hover { opacity: 0.9; }
+
+        /* ── VIP Locked State ── */
+        .locked-vip { position: relative; }
+        .locked-vip .product-body { opacity: 0.7; filter: blur(0.5px); }
+        .lock-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.85);
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        /* ── Sub Banner ── */
+        .sub-banner {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+        .sub-banner::after {
+            content: '🎁';
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            font-size: 8rem;
+            opacity: 0.15;
+            transform: rotate(-15deg);
+        }
+        .sub-banner-content h2 { color: white; margin-bottom: 0.3rem; font-size: 1.6rem; }
+        .sub-banner-content p { color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 700; }
+        .sub-btn {
+            background: white;
+            color: #6c5ce7;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 2;
+        }
+        .sub-btn:hover { transform: scale(1.05); }
+
+        /* ── Search bar top ── */
+        .search-bar-top {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .search-bar-top input {
+            flex: 1;
+            padding: 0.65rem 1.2rem;
+            border: 2px solid var(--pink-light);
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            min-width: 180px;
+        }
+        .search-bar-top input:focus { outline: none; border-color: var(--pink-dark); }
+
+        /* ── Filter Tabs (Mobile) ── */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            scrollbar-width: none;
+        }
+        .filter-tabs::-webkit-scrollbar { display: none; }
+        .filter-tab {
+            white-space: nowrap;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            border: 2px solid var(--pink-light);
+            background: var(--white);
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-tab.active, .filter-tab:hover {
+            background: var(--pink-dark);
+            color: white;
+            border-color: var(--pink-dark);
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(92, 58, 74, 0.5);
+            backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-content {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            max-width: 550px;
+            width: 95%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-close {
+            position: absolute; top: 15px; right: 15px;
+            font-size: 1.5rem; cursor: pointer; color: var(--text-light);
+        }
+        .modal-emoji { font-size: 5rem; text-align: center; margin-bottom: 1rem; }
+        .modal-sizes { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.8rem 0; }
+        .modal-size-btn {
+            padding: 0.4rem 1rem;
+            border: 2px solid var(--pink-light);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: var(--white);
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .modal-size-btn.selected, .modal-size-btn:hover {
+            border-color: var(--pink-dark);
+            background: var(--pink-light);
+            color: var(--pink-dark);
+        }
+        .modal-colors { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 0.8rem 0; }
+        .modal-color-btn {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .modal-color-btn.selected { border-color: var(--pink-dark); transform: scale(1.2); }
+
+        /* ── No results ── */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            grid-column: 1/-1;
+        }
+
+        /* ── Toast Notification ── */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--pink-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 12px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s, visibility 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            bottom: 50px;
+            opacity: 1;
+        }
+
+        /* ── VIP Modal ── */
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .vip-btn {
+            background: linear-gradient(135deg, #ffd700, #ffae34);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            animation: gold-pulse 2s infinite;
+            transition: all 0.2s;
+        }
+        .vip-btn:hover { transform: scale(1.05); }
+        @keyframes gold-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        .vip-card { text-align: center; padding: 1.5rem 0; }
+        .vip-coin { font-size: 4rem; margin-bottom: 0.5rem; filter: drop-shadow(0 10px 20px rgba(255,215,0,0.5)); }
+        .vip-title { font-family: 'Pacifico', cursive; font-size: 2rem; color: var(--pink-dark); }
+        .vip-points { font-size: 2.8rem; font-weight: 900; color: #ffae34; margin: 0.5rem 0; }
+        .vip-progress-bg { width: 100%; height: 16px; background: var(--pink-light); border-radius: 10px; margin: 1.5rem 0; overflow: hidden; }
+        .vip-progress-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #ff8c00); width: 45%; border-radius: 10px; transition: width 1s ease-out; }
+        .vip-message { font-size: 0.95rem; font-weight: 700; color: var(--text-light); }
+    </style>
+</head>
+
+<body>
+        <a class="logo" href="index.html">
+            BunBabe
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="shop.html" class="active">Shop</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="user-actions">
+            <button class="vip-btn" onclick="openVipModal()">💎 VIP</button>
+            <a class="nav-cart" onclick="toggleCart()">
+                🛒 <span class="cart-badge">0</span>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="shop-hero">
+            <h2>BunBabe Store 🛍️</h2>
+            <p>100+ handmade crochet cuties — plushies, merch, accessories & more!</p>
+        </section>
+
+        <div class="shop-layout">
+            <!-- ── Sidebar ── -->
+            <aside class="sidebar">
+                <h4>Categories</h4>
+                <a class="cat-link active" onclick="setCategory('all', this)">🌸 All Items <span class="cat-count" id="cnt-all">0</span></a>
+                <a class="cat-link" onclick="setCategory('plushie', this)">🐰 Plushies <span class="cat-count" id="cnt-plushie">0</span></a>
+                <a class="cat-link" onclick="setCategory('keychain', this)">🍓 Keychains <span class="cat-count" id="cnt-keychain">0</span></a>
+                <a class="cat-link" onclick="setCategory('flower', this)">🌸 Flowers <span class="cat-count" id="cnt-flower">0</span></a>
+                <a class="cat-link" onclick="setCategory('hat', this)">🎩 Hats <span class="cat-count" id="cnt-hat">0</span></a>
+                <a class="cat-link" onclick="setCategory('accessory', this)">🎀 Accessories <span class="cat-count" id="cnt-accessory">0</span></a>
+                <a class="cat-link" onclick="setCategory('merch', this)">✨ Merch <span class="cat-count" id="cnt-merch">0</span></a>
+                <a class="cat-link" onclick="setCategory('clothing', this)">👗 Clothing <span class="cat-count" id="cnt-clothing">0</span></a>
+                <a class="cat-link" onclick="setCategory('home', this)">🏠 Home Decor <span class="cat-count" id="cnt-home">0</span></a>
+
+                <h4>Sort By</h4>
+                <select class="sort-select" onchange="sortProducts(this.value)">
+                    <option value="default">Featured</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="rating">Top Rated</option>
+                    <option value="newest">Newest First</option>
+                </select>
+
+                <h4>Max Price (GH₵)</h4>
+                <input type="range" class="price-range" min="15" max="500" value="500" id="priceRange"
+                    oninput="document.getElementById('priceVal').innerText = this.value; filterProducts()">
+                <p style="font-size:0.85rem; text-align:center; margin-top:0.3rem;">Up to GH₵ <span id="priceVal">500</span></p>
+
+                <h4>Rating</h4>
+                <select class="sort-select" onchange="minRating = parseFloat(this.value); filterProducts()">
+                    <option value="0">All Ratings</option>
+                    <option value="4">⭐ 4+ Stars</option>
+                    <option value="4.5">⭐ 4.5+ Stars</option>
+                </select>
+            </aside>
+
+            <!-- ── Products Area ── -->
+            <div class="products-area">
+                <!-- 👑 BunBabe+ Elite Advert -->
+                <div class="sub-banner" style="background: linear-gradient(135deg, #1a0f14, #2d1b24); border: 2px solid var(--gold); border-radius: 20px;">
+                    <div class="sub-banner-content">
+                        <h2 style="font-family: 'Pacifico', cursive; color: var(--gold);">Get the BunBabe + Perks 👑</h2>
+                        <p style="color: rgba(255,255,255,0.9);">20% Member Discount • Free Shipping • Mystery Gifts</p>
+                    </div>
+                    <button class="sub-btn" style="background: var(--gold); color: #1a0f14;" onclick="window.location.href='membership.html'">Join Elite ✨</button>
+                </div>
+
+                <div class="search-bar-top">
+                    <input type="text" id="shopSearch" placeholder="Search 100+ items..." oninput="filterProducts()">
+                </div>
+                <div class="filter-tabs" id="filterTabs">
+                    <button class="filter-tab active" onclick="setCategory('all', this)">All</button>
+                    <button class="filter-tab" onclick="setCategory('wishlist', this)">🤍 My Wishlist</button>
+                    <button class="filter-tab" onclick="setCategory('plushie', this)">🐰 Plushies</button>
+                    <button class="filter-tab" onclick="setCategory('giftcard', this)">💌 Gift Cards</button>
+                    <button class="filter-tab" onclick="setCategory('keychain', this)">🍓 Keychains</button>
+                    <button class="filter-tab" onclick="setCategory('flower', this)">🌸 Flowers</button>
+                    <button class="filter-tab" onclick="setCategory('hat', this)">🎩 Hats</button>
+                    <button class="filter-tab" onclick="setCategory('accessory', this)">🎀 Accessories</button>
+                    <button class="filter-tab" onclick="setCategory('merch', this)">✨ Merch</button>
+                    <button class="filter-tab" onclick="setCategory('clothing', this)">👗 Clothing</button>
+                    <button class="filter-tab" onclick="setCategory('home', this)">🏠 Home</button>
+                </div>
+
+                <div class="products-topbar">
+                    <span class="products-count" id="resultsCount">Loading...</span>
+                </div>
+
+                <div class="products-grid" id="productGrid">
+                    <p style="text-align:center; padding:2rem; grid-column:1/-1;">Loading items... 🧶</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bouquet Builder -->
+        <div class="container" id="bouquetBuilderSection">
+            <h2 class="text-center">🌸 Custom Bouquet Builder</h2>
+            <p class="text-center">Click flowers below to build your own everlasting bouquet!</p>
+            <div class="builder-container">
+                <div class="builder-canvas" id="builderCanvas">
+                    <p style="text-align:center; margin-top:180px; color:var(--text-light); opacity:0.6;">Your flowers will appear here...</p>
+                </div>
+                <div class="builder-controls">
+                    <h3>Pick Your Flowers</h3>
+                    <div class="flower-options">
+                        <span class="flower-choice" onclick="addToBouquet('🌸')">🌸</span>
+                        <span class="flower-choice" onclick="addToBouquet('🌼')">🌼</span>
+                        <span class="flower-choice" onclick="addToBouquet('🌷')">🌷</span>
+                        <span class="flower-choice" onclick="addToBouquet('🌹')">🌹</span>
+                        <span class="flower-choice" onclick="addToBouquet('🌻')">🌻</span>
+                        <span class="flower-choice" onclick="addToBouquet('🌿')">🌿</span>
+                        <span class="flower-choice" onclick="addToBouquet('🍃')">🍃</span>
+                        <span class="flower-choice" onclick="addToBouquet('🌵')">🌵</span>
+                    </div>
+                    <button class="btn mt-4" style="width:100%;" onclick="clearBouquet()">Clear Bouquet 🗑️</button>
+                    <button class="btn mt-2" style="width:100%; background:var(--pink-light); color:var(--pink-dark);" onclick="alert('Custom bouquet order sent! We will contact you. 💗')">Order This Bouquet 🛍️</button>
+                    <div style="margin-top:2rem; padding:1.2rem; background:rgba(212,175,55,0.05); border-radius:16px; border:1px solid var(--gold-light);">
+                        <h4 style="font-size:0.85rem; color:var(--gold); margin-bottom:0.5rem;">🧵 Care & Materials (BunBabe + Quality)</h4>
+                        <p style="font-size:0.75rem; color:var(--text-light); line-height:1.4;">
+                            • Handcrafted with premium velvet chenille yarn.<br>
+                            • Hand wash cold only. Do not tumble dry.<br>
+                            • Gently reshape while damp to maintain fluffiness.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Quick View Modal ── -->
+    <div id="modalOverlay" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModalDirect()">×</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- ── VIP Modal ── -->
+    <div id="vipModalOverlay" class="modal-overlay" onclick="closeVipModal(event)">
+        <div class="modal-content" style="max-width:400px;">
+            <span class="modal-close" onclick="closeVipModalDirect()">×</span>
+            <div class="vip-card">
+                <div class="vip-coin">🐰💎</div>
+                <div class="vip-title">BunBabe VIP</div>
+                <div style="font-size:0.9rem; font-weight:700; color:var(--text-light); text-transform:uppercase;">Your Reward Balance</div>
+                <div class="vip-points">1,450</div>
+                <div style="font-size:0.85rem; color:var(--text-light);">Bunny Points (BNB)</div>
+                <div class="vip-progress-bg">
+                    <div class="vip-progress-fill" style="width: 72.5%;"></div>
+                </div>
+                <div class="vip-message">
+                    Only <strong>550 BNB</strong> more until you unlock your next 20% OFF Gold Tier Coupon! 🎁
+                </div>
+                <button class="action-btn" style="width:100%; margin-top:2rem; padding:1rem;" onclick="closeVipModalDirect()">Keep Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Toast Notification ── -->
+    <div id="toast">Message here</div>
+
+    <footer>
+        <span>© 2026 BunBabe.</span> All rights reserved. Made with 💗
+    </footer>
+
+    <script>
+    // ─── PRODUCT DATABASE (100+ items) ───────────────────────────────────────
+    const allProducts = [
+      // 🎁 SUBSCRIPTIONS & VIP
+      { id:500, name:'Monthly Bunny Box',     emoji:'🎁', cat:'merch',     price:150, was:200, rating:5.0, reviews:89,  sizes:['1 Month','3 Months'], colors:null, badge:'SUBSCRIPTION', stock:'In Stock', new:true, sub:true },
+      { id:600, name:'Diamond Queen Bunny',   emoji:'💎', cat:'plushie',   price:450, was:600, rating:5.0, reviews:12,  sizes:['XL'],                colors:['#fff','#a8d8ea'], badge:'VIP ONLY', stock:'In Stock', new:true, vipOnly:true },
+      { id:601, name:'Gold Star Bee',          emoji:'🌟', cat:'plushie',   price:300, was:400, rating:4.9, reviews:25,  sizes:['L'],                 colors:['#ffd700'], badge:'VIP ONLY', stock:'In Stock', new:true, vipOnly:true },
+
+      // PLUSHIES
+      { id:1,  name:'Soft Bunny Plushie',     emoji:'🐰', cat:'plushie',   price:120, was:150, rating:4.9, reviews:312, sizes:['S','M','L'],        colors:['#ffc0cb','#fff','#a8d8ea'],  badge:'Bestseller', stock:'In Stock', new:false },
+      { id:2,  name:'Mushroom Plushie',        emoji:'🍄', cat:'plushie',   price:95,  was:110, rating:4.8, reviews:178, sizes:['S','M'],            colors:['#ff6b6b','#fff','#a0522d'],  badge:'New',        stock:'In Stock', new:true  },
+      { id:3,  name:'Dino Friend',             emoji:'🦕', cat:'plushie',   price:110, was:130, rating:4.7, reviews:95,  sizes:['S','M','L'],        colors:['#98d8c8','#ffd1dc'],          badge:null,         stock:'In Stock', new:false },
+      { id:4,  name:'Strawberry Cow',          emoji:'🐄', cat:'plushie',   price:130, was:160, rating:5.0, reviews:244, sizes:['M','L','XL'],       colors:['#ffc0cb','#fff','#ff6b6b'],  badge:'Bestseller', stock:'In Stock', new:false },
+      { id:5,  name:'Axolotl Friend',          emoji:'🦎', cat:'plushie',   price:110, was:140, rating:4.8, reviews:132, sizes:['S','M'],            colors:['#ffc0cb','#98d8c8'],          badge:'New',        stock:'In Stock', new:true  },
+      { id:6,  name:'Tiny Turtle',             emoji:'🐢', cat:'plushie',   price:65,  was:80,  rating:4.6, reviews:88,  sizes:['S'],               colors:['#98d8c8','#2e8b57'],          badge:null,         stock:'In Stock', new:false },
+      { id:7,  name:'Honey Bee Plushie',       emoji:'🐝', cat:'plushie',   price:80,  was:95,  rating:4.7, reviews:67,  sizes:['S','M'],            colors:['#ffd700','#000'],              badge:null,         stock:'In Stock', new:false },
+      { id:8,  name:'Chunky Elephant',         emoji:'🐘', cat:'plushie',   price:140, was:170, rating:4.9, reviews:201, sizes:['M','L','XL'],       colors:['#c8c8c8','#ffd1dc','#a8d8ea'],badge:'Popular',    stock:'In Stock', new:false },
+      { id:9,  name:'Baby Panda',              emoji:'🐼', cat:'plushie',   price:125, was:150, rating:4.8, reviews:189, sizes:['S','M','L'],        colors:['#fff','#333'],                badge:null,         stock:'In Stock', new:false },
+      { id:10, name:'Fluffy Ghost',            emoji:'👻', cat:'plushie',   price:75,  was:90,  rating:4.6, reviews:55,  sizes:['S','M'],            colors:['#fff','#ffe4ea'],              badge:'Spooky',     stock:'In Stock', new:true  },
+      { id:11, name:'Love Bear',               emoji:'🐻', cat:'plushie',   price:115, was:140, rating:4.9, reviews:298, sizes:['S','M','L','XL'],   colors:['#c8a882','#ffc0cb','#fff'],   badge:'Bestseller', stock:'In Stock', new:false },
+      { id:12, name:'Frog Plushie',            emoji:'🐸', cat:'plushie',   price:90,  was:110, rating:4.7, reviews:143, sizes:['S','M'],            colors:['#7bc67e','#26a65b'],          badge:null,         stock:'In Stock', new:false },
+      { id:13, name:'StarFish Plushie',        emoji:'⭐', cat:'plushie',   price:70,  was:85,  rating:4.5, reviews:39,  sizes:['S','M'],            colors:['#ffd700','#ff6b6b','#ffc0cb'],badge:'New',        stock:'In Stock', new:true  },
+      { id:14, name:'Rainbow Unicorn',         emoji:'🦄', cat:'plushie',   price:145, was:180, rating:5.0, reviews:347, sizes:['M','L','XL'],       colors:['#ff9ff3','#54a0ff','#ffd700'],badge:'Bestseller', stock:'In Stock', new:false },
+      { id:15, name:'Puffy Penguin',           emoji:'🐧', cat:'plushie',   price:95,  was:115, rating:4.7, reviews:112, sizes:['S','M','L'],        colors:['#000','#fff','#ffd700'],      badge:null,         stock:'In Stock', new:false },
+      { id:16, name:'Chubby Cat',              emoji:'🐱', cat:'plushie',   price:100, was:125, rating:4.8, reviews:175, sizes:['S','M'],            colors:['#c8a882','#fff','#ffc0cb'],   badge:'Popular',    stock:'In Stock', new:false },
+      { id:17, name:'Baby Chick',              emoji:'🐥', cat:'plushie',   price:60,  was:75,  rating:4.6, reviews:88,  sizes:['S'],               colors:['#ffd700','#ffae34'],          badge:null,         stock:'In Stock', new:false },
+      { id:18, name:'Octopus Buddy',           emoji:'🐙', cat:'plushie',   price:105, was:130, rating:4.8, reviews:162, sizes:['S','M','L'],        colors:['#ff6b6b','#a29bfe','#fdc7d7'],badge:'New',        stock:'In Stock', new:true  },
+      { id:19, name:'Smiling Sun',             emoji:'☀️', cat:'plushie',   price:80,  was:95,  rating:4.7, reviews:74,  sizes:['S','M'],            colors:['#ffd700','#ffae34'],          badge:null,         stock:'In Stock', new:false },
+      { id:20, name:'Cactus Cutie',            emoji:'🌵', cat:'plushie',   price:75,  was:90,  rating:4.5, reviews:51,  sizes:['S','M'],            colors:['#2e8b57','#7bc67e','#ffc0cb'],badge:null,         stock:'In Stock', new:false },
+      { id:21, name:'Whale Plushie',           emoji:'🐋', cat:'plushie',   price:130, was:160, rating:4.9, reviews:221, sizes:['M','L'],            colors:['#a8d8ea','#54a0ff','#fff'],   badge:'Popular',    stock:'In Stock', new:false },
+      { id:22, name:'Croc Plushie',            emoji:'🐊', cat:'plushie',   price:110, was:135, rating:4.7, reviews:99,  sizes:['S','M','L'],        colors:['#2e8b57','#7bc67e'],          badge:null,         stock:'In Stock', new:false },
+      { id:23, name:'Little Lamb',             emoji:'🐑', cat:'plushie',   price:95,  was:115, rating:4.8, reviews:134, sizes:['S','M'],            colors:['#fff','#ffd1dc'],              badge:null,         stock:'In Stock', new:false },
+      { id:24, name:'Baby Fox',                emoji:'🦊', cat:'plushie',   price:115, was:140, rating:4.9, reviews:188, sizes:['S','M','L'],        colors:['#ff7f00','#fff','#333'],       badge:'Bestseller', stock:'In Stock', new:false },
+      { id:25, name:'Dumpling Plushie',        emoji:'🥟', cat:'plushie',   price:55,  was:65,  rating:4.6, reviews:43,  sizes:['S'],               colors:['#f5deb3','#fff'],              badge:'New',        stock:'In Stock', new:true  },
+
+      // KEYCHAINS
+      { id:26, name:'Strawberry Keychain',     emoji:'🍓', cat:'keychain',  price:45,  was:55,  rating:4.7, reviews:203, sizes:null,                 colors:['#ff6b6b','#ffd700','#ffc0cb'],badge:null,         stock:'In Stock', new:false },
+      { id:27, name:'Sunflower Keychain',      emoji:'🌻', cat:'keychain',  price:40,  was:50,  rating:4.6, reviews:156, sizes:null,                 colors:['#ffd700','#ff6b6b'],          badge:null,         stock:'In Stock', new:false },
+      { id:28, name:'Koala Keychain',          emoji:'🐨', cat:'keychain',  price:45,  was:55,  rating:4.8, reviews:89,  sizes:null,                 colors:['#c8c8c8','#ffc0cb'],          badge:null,         stock:'In Stock', new:false },
+      { id:29, name:'Rainbow Keychain',        emoji:'🌈', cat:'keychain',  price:35,  was:45,  rating:4.5, reviews:67,  sizes:null,                 colors:['#ff6b6b','#ffd700','#54a0ff'],badge:'New',        stock:'In Stock', new:true  },
+      { id:30, name:'Ice Cream Keychain',      emoji:'🍦', cat:'keychain',  price:40,  was:50,  rating:4.7, reviews:112, sizes:null,                 colors:['#fff','#ffc0cb','#a8d8ea'],   badge:null,         stock:'In Stock', new:false },
+      { id:31, name:'Bubble Tea Keychain',     emoji:'🧋', cat:'keychain',  price:45,  was:55,  rating:4.9, reviews:178, sizes:null,                 colors:['#c8a882','#ffd1dc','#a8d8ea'],badge:'Popular',    stock:'In Stock', new:false },
+      { id:32, name:'Moon & Stars Keychain',   emoji:'🌙', cat:'keychain',  price:38,  was:48,  rating:4.6, reviews:93,  sizes:null,                 colors:['#ffd700','#fff','#a29bfe'],   badge:null,         stock:'In Stock', new:false },
+      { id:33, name:'Cherry Keychain',         emoji:'🍒', cat:'keychain',  price:35,  was:45,  rating:4.7, reviews:141, sizes:null,                 colors:['#ff6b6b','#2e8b57'],          badge:'Bestseller', stock:'In Stock', new:false },
+      { id:34, name:'Donut Keychain',          emoji:'🍩', cat:'keychain',  price:38,  was:48,  rating:4.6, reviews:77,  sizes:null,                 colors:['#c8a882','#ffc0cb','#a29bfe'],badge:null,         stock:'In Stock', new:false },
+      { id:35, name:'Avocado Keychain',        emoji:'🥑', cat:'keychain',  price:42,  was:52,  rating:4.8, reviews:133, sizes:null,                 colors:['#2e8b57','#ffd700'],          badge:'New',        stock:'In Stock', new:true  },
+      { id:36, name:'Heart Keychain',          emoji:'❤️', cat:'keychain',  price:30,  was:38,  rating:4.9, reviews:245, sizes:null,                 colors:['#ff6b6b','#ffc0cb','#a29bfe'],badge:'Bestseller', stock:'In Stock', new:false },
+      { id:37, name:'Cloud Keychain',          emoji:'☁️', cat:'keychain',  price:35,  was:44,  rating:4.5, reviews:58,  sizes:null,                 colors:['#fff','#a8d8ea','#ffc0cb'],   badge:null,         stock:'In Stock', new:false },
+      { id:38, name:'Alien Keychain',          emoji:'👾', cat:'keychain',  price:38,  was:47,  rating:4.6, reviews:81, sizes:null,                  colors:['#54a0ff','#7ed321','#a29bfe'],badge:null,         stock:'In Stock', new:false },
+
+      // FLOWERS
+      { id:39, name:'Daisy Bouquet',           emoji:'🌼', cat:'flower',    price:85,  was:100, rating:4.9, reviews:187, sizes:['Small','Large'],     colors:['#fff','#ffd700'],              badge:null,         stock:'In Stock', new:false },
+      { id:40, name:'Romantic Tulip Single',   emoji:'🌷', cat:'flower',    price:55,  was:68,  rating:4.8, reviews:112, sizes:['Single','Bundle 3'], colors:['#ff6b6b','#ffc0cb','#fff'],   badge:null,         stock:'In Stock', new:false },
+      { id:41, name:'Sunflower Bunch',         emoji:'🌻', cat:'flower',    price:90,  was:110, rating:4.9, reviews:156, sizes:['Small','Large'],     colors:['#ffd700'],                     badge:'Popular',    stock:'In Stock', new:false },
+      { id:42, name:'Rose Bouquet',            emoji:'🌹', cat:'flower',    price:100, was:125, rating:5.0, reviews:234, sizes:['3 Roses','6 Roses','12 Roses'], colors:['#ff6b6b','#ffc0cb','#fff','#ff0000'], badge:'Bestseller', stock:'In Stock', new:false },
+      { id:43, name:'Lavender Bunch',          emoji:'💜', cat:'flower',    price:75,  was:90,  rating:4.7, reviews:98,  sizes:['Small','Large'],     colors:['#a29bfe','#ffc0cb'],          badge:null,         stock:'In Stock', new:false },
+      { id:44, name:'Cherry Blossom Stem',     emoji:'🌸', cat:'flower',    price:60,  was:72,  rating:4.8, reviews:143, sizes:['Single','Bundle 3'], colors:['#ffc0cb','#fff'],              badge:'New',        stock:'In Stock', new:true  },
+      { id:45, name:'Crochet Succulent',       emoji:'🪴', cat:'flower',    price:40,  was:50,  rating:4.6, reviews:67,  sizes:['Mini','Standard'],   colors:['#2e8b57','#7bc67e'],          badge:null,         stock:'In Stock', new:false },
+      { id:46, name:'Mixed Wildflower Box',    emoji:'🌺', cat:'flower',    price:120, was:150, rating:4.9, reviews:211, sizes:['6pcs','12pcs'],      colors:['#ff6b6b','#ffd700','#ffc0cb'],badge:'Elite',      stock:'In Stock', new:false },
+      { id:47, name:'Poppy Bunch',             emoji:'🌷', cat:'flower',    price:70,  was:85,  rating:4.7, reviews:89,  sizes:['Small','Large'],     colors:['#ff6b6b','#ff0000'],          badge:null,         stock:'In Stock', new:false },
+      { id:48, name:'Pothos Plant',            emoji:'🌿', cat:'flower',    price:55,  was:65,  rating:4.6, reviews:54,  sizes:['Mini','Standard'],   colors:['#2e8b57','#7bc67e'],          badge:'New',        stock:'In Stock', new:true  },
+
+      // HATS
+      { id:49, name:'Froggy Beanie',           emoji:'🐸', cat:'hat',       price:55,  was:68,  rating:4.9, reviews:289, sizes:['S/M','L/XL'],        colors:['#7bc67e','#2e8b57','#ffc0cb'],badge:'Popular',    stock:'In Stock', new:false },
+      { id:50, name:'Cat Ear Beanie',          emoji:'🐱', cat:'hat',       price:60,  was:72,  rating:4.7, reviews:167, sizes:['S/M','L/XL'],        colors:['#c8a882','#fff','#ffc0cb','#333'], badge:null,    stock:'In Stock', new:false },
+      { id:51, name:'Bear Ear Beanie',         emoji:'🐻', cat:'hat',       price:60,  was:72,  rating:4.8, reviews:201, sizes:['S/M','L/XL'],        colors:['#c8a882','#333','#ffc0cb'],   badge:'Popular',    stock:'In Stock', new:false },
+      { id:52, name:'Bunny Ear Beanie',        emoji:'🐰', cat:'hat',       price:58,  was:70,  rating:4.9, reviews:312, sizes:['S/M','L/XL'],        colors:['#fff','#ffc0cb','#c8a882'],   badge:'Bestseller', stock:'In Stock', new:false },
+      { id:53, name:'Flower Crown Hat',        emoji:'🌸', cat:'hat',       price:65,  was:78,  rating:4.8, reviews:145, sizes:['One Size'],          colors:['#ffc0cb','#fff','#ffd700'],   badge:'New',        stock:'In Stock', new:true  },
+      { id:54, name:'Dino Hat',                emoji:'🦕', cat:'hat',       price:62,  was:75,  rating:4.7, reviews:109, sizes:['S/M','L/XL'],        colors:['#98d8c8','#2e8b57'],          badge:null,         stock:'In Stock', new:false },
+      { id:55, name:'Shark Bucket Hat',        emoji:'🦈', cat:'hat',       price:68,  was:82,  rating:4.8, reviews:178, sizes:['S/M','L/XL'],        colors:['#54a0ff','#c8c8c8'],          badge:'New',        stock:'In Stock', new:true  },
+      { id:56, name:'Strawberry Beret',        emoji:'🍓', cat:'hat',       price:55,  was:65,  rating:4.6, reviews:88,  sizes:['One Size'],          colors:['#ff6b6b','#fff'],              badge:null,         stock:'In Stock', new:false },
+      { id:57, name:'Sun Wide Brim',           emoji:'☀️', cat:'hat',       price:72,  was:88,  rating:4.7, reviews:132, sizes:['S/M','L/XL'],        colors:['#ffd700','#fff','#c8a882'],   badge:'Summer',     stock:'In Stock', new:false },
+      { id:58, name:'Panda Bucket Hat',        emoji:'🐼', cat:'hat',       price:65,  was:78,  rating:4.8, reviews:156, sizes:['S/M','L/XL'],        colors:['#fff','#333'],                badge:null,         stock:'In Stock', new:false },
+
+      // ACCESSORIES
+      { id:59, name:'Pastel Tote Bag',         emoji:'👜', cat:'accessory', price:150, was:185, rating:4.9, reviews:267, sizes:['Standard'],          colors:['#ffc0cb','#a8d8ea','#ffd700','#fff'], badge:'Elite', stock:'In Stock', new:false },
+      { id:60, name:'Scrunchie Set (3pc)',      emoji:'🎀', cat:'accessory', price:25,  was:32,  rating:4.7, reviews:312, sizes:['Set of 3'],           colors:['#ffc0cb','#fff','#a8d8ea'],   badge:'Bestseller', stock:'In Stock', new:false },
+      { id:61, name:'Coaster Set (4pc)',        emoji:'🍵', cat:'accessory', price:50,  was:62,  rating:4.6, reviews:78,  sizes:['Set of 4'],           colors:['#ffc0cb','#a8d8ea','#ffd700'],badge:null,         stock:'In Stock', new:false },
+      { id:62, name:'Cat Ear Headband',         emoji:'😺', cat:'accessory', price:35,  was:44,  rating:4.8, reviews:189, sizes:['One Size'],           colors:['#c8a882','#ffc0cb','#333'],   badge:'Popular',    stock:'In Stock', new:false },
+      { id:63, name:'Crochet Wallet',           emoji:'👛', cat:'accessory', price:85,  was:105, rating:4.7, reviews:121, sizes:['Standard'],           colors:['#ffc0cb','#c8a882','#fff'],   badge:null,         stock:'In Stock', new:false },
+      { id:64, name:'Phone Pouch',              emoji:'📱', cat:'accessory', price:65,  was:80,  rating:4.6, reviews:98,  sizes:['Universal'],          colors:['#ffc0cb','#a8d8ea','#ffd700'],badge:'New',        stock:'In Stock', new:true  },
+      { id:65, name:'Lavender Eye Pillow',      emoji:'😴', cat:'accessory', price:55,  was:68,  rating:4.8, reviews:143, sizes:['One Size'],           colors:['#a29bfe','#ffc0cb'],          badge:null,         stock:'In Stock', new:false },
+      { id:66, name:'Chunky Friendship Band',   emoji:'🤝', cat:'accessory', price:20,  was:25,  rating:4.7, reviews:222, sizes:['XS','S','M','L'],     colors:['#ff6b6b','#ffd700','#54a0ff','#ffc0cb'], badge:'Bestseller', stock:'In Stock', new:false },
+      { id:67, name:'Crochet Hair Clip Set',    emoji:'🌸', cat:'accessory', price:30,  was:38,  rating:4.6, reviews:99,  sizes:['Set of 5'],           colors:['#ffc0cb','#ffd700','#fff'],   badge:null,         stock:'In Stock', new:false },
+      { id:68, name:'Bucket Bag',               emoji:'🪣', cat:'accessory', price:120, was:150, rating:4.8, reviews:134, sizes:['Standard'],           colors:['#ffc0cb','#c8a882','#a8d8ea'],badge:null,         stock:'In Stock', new:false },
+      { id:69, name:'Crossbody Bag',            emoji:'💼', cat:'accessory', price:130, was:160, rating:4.7, reviews:108, sizes:['Standard'],           colors:['#ffc0cb','#fff','#c8a882'],   badge:'New',        stock:'In Stock', new:true  },
+      { id:70, name:'Market Bag',               emoji:'🛍️', cat:'accessory', price:90,  was:110, rating:4.8, reviews:167, sizes:['Standard'],           colors:['#ffc0cb','#a8d8ea','#ffd700'],badge:'Popular',    stock:'In Stock', new:false },
+      { id:71, name:'Coin Purse',               emoji:'🪙', cat:'accessory', price:35,  was:42,  rating:4.6, reviews:88,  sizes:['Standard'],           colors:['#ffc0cb','#c8a882','#a8d8ea'],badge:null,         stock:'In Stock', new:false },
+      { id:72, name:'Bookmarker (Set 3)',        emoji:'📖', cat:'accessory', price:25,  was:32,  rating:4.7, reviews:77,  sizes:['Set of 3'],           colors:['#ffc0cb','#ffd700','#a29bfe'],badge:'New',        stock:'In Stock', new:true  },
+      { id:73, name:'Bottle Holder Sling',      emoji:'🧴', cat:'accessory', price:70,  was:85,  rating:4.7, reviews:112, sizes:['Standard'],           colors:['#ffc0cb','#a8d8ea','#ffd700'],badge:null,         stock:'In Stock', new:false },
+
+      // MERCH
+      { id:74, name:'BunBabe Hoodie',           emoji:'🧥', cat:'merch',     price:220, was:280, rating:4.9, reviews:187, sizes:['XS','S','M','L','XL','XXL'], colors:['#fff','#ffc0cb','#333','#a8d8ea'], badge:'New', stock:'In Stock', new:true },
+      { id:75, name:'BunBabe School Bag',       emoji:'🎒', cat:'merch',     price:180, was:225, rating:4.8, reviews:201, sizes:['Standard'],                 colors:['#ffc0cb','#a8d8ea','#333'],    badge:'Elite',      stock:'In Stock', new:false },
+      { id:76, name:'BunBabe Water Bottle',     emoji:'🍶', cat:'merch',     price:55,  was:70,  rating:4.7, reviews:156, sizes:['500ml','750ml','1L'],        colors:['#ffc0cb','#a8d8ea','#fff','#333'], badge:null,    stock:'In Stock', new:false },
+      { id:77, name:'BunBabe T-Shirt',          emoji:'👕', cat:'merch',     price:95,  was:120, rating:4.7, reviews:134, sizes:['XS','S','M','L','XL'],       colors:['#fff','#ffc0cb','#333','#a8d8ea'], badge:'New',   stock:'In Stock', new:true  },
+      { id:78, name:'BunBabe Tote Bag',         emoji:'🛒', cat:'merch',     price:75,  was:95,  rating:4.8, reviews:98,  sizes:['Standard'],                 colors:['#fff','#ffc0cb'],              badge:null,         stock:'In Stock', new:false },
+      { id:79, name:'BunBabe Cap',              emoji:'🧢', cat:'merch',     price:65,  was:80,  rating:4.6, reviews:77,  sizes:['S/M','L/XL'],               colors:['#ffc0cb','#fff','#333'],        badge:null,         stock:'In Stock', new:false },
+      { id:80, name:'BunBabe Sticker Pack',     emoji:'🩹', cat:'merch',     price:20,  was:25,  rating:4.9, reviews:312, sizes:['10pcs','20pcs'],             colors:null,                            badge:'Bestseller', stock:'In Stock', new:false },
+      { id:81, name:'BunBabe Mug',              emoji:'☕', cat:'merch',     price:60,  was:75,  rating:4.8, reviews:144, sizes:['250ml','350ml'],             colors:['#fff','#ffc0cb'],              badge:null,         stock:'In Stock', new:false },
+      { id:82, name:'BunBabe Sweatpants',       emoji:'👖', cat:'merch',     price:160, was:200, rating:4.7, reviews:89,  sizes:['XS','S','M','L','XL'],       colors:['#fff','#ffc0cb','#333'],        badge:'New',        stock:'In Stock', new:true  },
+      { id:83, name:'BunBabe Pencil Case',      emoji:'✏️', cat:'merch',     price:45,  was:55,  rating:4.7, reviews:111, sizes:['Standard'],                 colors:['#ffc0cb','#fff','#a8d8ea'],    badge:null,         stock:'In Stock', new:false },
+
+      // CLOTHING
+      { id:84, name:'Lace Crochet Top',         emoji:'👚', cat:'clothing',  price:185, was:230, rating:4.8, reviews:134, sizes:['XS','S','M','L','XL'],       colors:['#fff','#ffc0cb','#c8a882'],    badge:'Trending',   stock:'In Stock', new:true  },
+      { id:85, name:'Crochet Cardigan',         emoji:'🧣', cat:'clothing',  price:280, was:350, rating:4.9, reviews:201, sizes:['XS','S','M','L','XL'],       colors:['#fff','#c8a882','#ffc0cb','#a8d8ea'], badge:'Elite', stock:'In Stock', new:false },
+      { id:86, name:'Crop Crochet Top',         emoji:'🩱', cat:'clothing',  price:140, was:175, rating:4.7, reviews:167, sizes:['XS','S','M','L'],            colors:['#ffc0cb','#fff','#ffd700','#a8d8ea'], badge:'New',   stock:'In Stock', new:true  },
+      { id:87, name:'Crochet Bucket Hat',       emoji:'🪣', cat:'clothing',  price:70,  was:85,  rating:4.7, reviews:112, sizes:['S/M','L/XL'],               colors:['#ffc0cb','#a8d8ea','#ffd700','#fff'], badge:null,    stock:'In Stock', new:false },
+      { id:88, name:'Boho Maxi Vest',           emoji:'🧶', cat:'clothing',  price:250, was:310, rating:4.8, reviews:88,  sizes:['S','M','L','XL'],            colors:['#c8a882','#fff','#ffc0cb'],    badge:'Trending',   stock:'In Stock', new:true  },
+      { id:89, name:'Crochet Skirt Mini',       emoji:'👗', cat:'clothing',  price:165, was:205, rating:4.7, reviews:99,  sizes:['XS','S','M','L'],            colors:['#fff','#ffc0cb','#a8d8ea'],    badge:'New',        stock:'In Stock', new:true  },
+      { id:90, name:'Stripe Crochet Set',       emoji:'🩲', cat:'clothing',  price:210, was:265, rating:4.8, reviews:78,  sizes:['XS','S','M','L','XL'],       colors:['#fff','#ff6b6b','#54a0ff'],    badge:'New',        stock:'In Stock', new:true  },
+      { id:91, name:'Crochet Lounge Shorts',    emoji:'🩳', cat:'clothing',  price:95,  was:120, rating:4.6, reviews:65,  sizes:['XS','S','M','L','XL'],       colors:['#ffc0cb','#a8d8ea','#fff'],    badge:null,         stock:'In Stock', new:false },
+      { id:92, name:'Crochet Belt',             emoji:'🪡', cat:'clothing',  price:45,  was:55,  rating:4.5, reviews:44,  sizes:['XS','S','M','L','XL'],       colors:['#ffc0cb','#c8a882','#fff'],    badge:null,         stock:'In Stock', new:false },
+      { id:93, name:'Halter Neck Top',          emoji:'👙', cat:'clothing',  price:130, was:160, rating:4.7, reviews:115, sizes:['XS','S','M','L'],            colors:['#ffc0cb','#fff','#a8d8ea'],    badge:'Summer',     stock:'In Stock', new:false },
+
+      // HOME DECOR
+      { id:94,  name:'Wall Hanging Macramé',    emoji:'🖼️', cat:'home',      price:150, was:185, rating:4.8, reviews:132, sizes:['Small','Medium','Large'],     colors:['#c8a882','#fff','#ffc0cb'],    badge:'Popular',    stock:'In Stock', new:false },
+      { id:95,  name:'Crochet Cushion Cover',   emoji:'🛋️', cat:'home',      price:95,  was:115, rating:4.7, reviews:98,  sizes:['45x45cm','50x50cm'],         colors:['#ffc0cb','#fff','#a8d8ea','#ffd700'], badge:null,    stock:'In Stock', new:false },
+      { id:96,  name:'Hanging Plant Holder',    emoji:'🌱', cat:'home',      price:60,  was:75,  rating:4.8, reviews:167, sizes:['Small','Medium'],             colors:['#c8a882','#ffc0cb','#fff'],    badge:'Popular',    stock:'In Stock', new:false },
+      { id:97,  name:'Crochet Table Runner',    emoji:'🪡', cat:'home',      price:110, was:135, rating:4.6, reviews:55,  sizes:['30x90cm','30x150cm'],        colors:['#fff','#ffc0cb','#c8a882'],    badge:null,         stock:'In Stock', new:false },
+      { id:98,  name:'Bedside Basket Set',      emoji:'🧺', cat:'home',      price:130, was:160, rating:4.7, reviews:88,  sizes:['Set of 2','Set of 3'],        colors:['#c8a882','#fff','#ffc0cb'],    badge:'New',        stock:'In Stock', new:true  },
+      { id:99,  name:'Bathroom Mat',            emoji:'🛁', cat:'home',      price:85,  was:105, rating:4.6, reviews:77,  sizes:['50x70cm','60x90cm'],         colors:['#fff','#ffc0cb','#a8d8ea'],    badge:null,         stock:'In Stock', new:false },
+      { id:100, name:'Lampshade Cover',         emoji:'💡', cat:'home',      price:90,  was:112, rating:4.7, reviews:66,  sizes:['Small','Medium','Large'],     colors:['#fff','#ffc0cb','#c8a882'],    badge:'New',        stock:'In Stock', new:true  },
+      { id:101, name:'Crochet Pot Holder',      emoji:'🍳', cat:'home',      price:30,  was:38,  rating:4.6, reviews:99,  sizes:['15cm','20cm'],               colors:['#ffc0cb','#fff','#ffd700'],    badge:null,         stock:'In Stock', new:false },
+      { id:102, name:'Dream Catcher',           emoji:'🌙', cat:'home',      price:75,  was:92,  rating:4.8, reviews:143, sizes:['Small','Medium','Large'],     colors:['#c8a882','#ffc0cb','#fff','#a29bfe'], badge:'Popular', stock:'In Stock', new:false },
+      { id:103, name:'Crochet Clock Cover',     emoji:'🕐', cat:'home',      price:80,  was:100, rating:4.5, reviews:42,  sizes:['Universal'],                 colors:['#fff','#c8a882'],              badge:null,         stock:'In Stock', new:false },
+      { id:104, name:'Crochet Advent Calendar', emoji:'🎄', cat:'home',      price:160, was:200, rating:4.9, reviews:178, sizes:['24 Pockets'],                colors:['#ff6b6b','#2e8b57','#ffd700'], badge:'Seasonal',   stock:'In Stock', new:true  },
+      { id:105, name:'DIY Starter Kit',         emoji:'🎁', cat:'home',      price:95,  was:120, rating:4.9, reviews:221, sizes:['Beginner','Intermediate'],    colors:['#ffc0cb','#a8d8ea'],           badge:'New',        stock:'In Stock', new:true  },
+
+      // GIFT CARDS
+      { id:200, name:'GH₵ 50 Digital Gift Card', emoji:'💌', cat:'giftcard', price:50,  was:null, rating:5.0, reviews:50,  sizes:null, colors:null, badge:'Gift', stock:'In Stock', new:true },
+      { id:201, name:'GH₵ 100 Digital Gift Card', emoji:'💌', cat:'giftcard', price:100, was:null, rating:5.0, reviews:80,  sizes:null, colors:null, badge:'Popular', stock:'In Stock', new:true },
+      { id:202, name:'GH₵ 200 Digital Gift Card', emoji:'💌', cat:'giftcard', price:200, was:null, rating:5.0, reviews:110, sizes:null, colors:null, badge:'VIP', stock:'In Stock', new:true }
+    ];
+
+    // ─── STATE ────────────────────────────────────────────────
+    let currentCategory = 'all';
+    let currentSort = 'default';
+    let maxPrice = 500;
+    let minRating = 0;
+    let wishlist = JSON.parse(localStorage.getItem('bunbabe_wishlist') || '[]');
+
+    // ─── INIT ─────────────────────────────────────────────────
+    async function initShop() {
+        // Connect to database and merge products
+        if (window.DATABASE) {
+            try {
+                const dbProducts = await window.DATABASE.getProducts();
+                if (dbProducts && dbProducts.length > 0) {
+                    // Update allProducts by filtering out old ones with same ID or adding new ones
+                    dbProducts.forEach(newP => {
+                        const idx = allProducts.findIndex(p => p.id === newP.id);
+                        if (idx !== -1) allProducts[idx] = newP;
+                        else allProducts.push(newP);
+                    });
+                }
+            } catch(e) { console.warn("DB not ready, using defaults", e); }
+        }
+        
+        updateCounts();
+        filterProducts();
+    }
+
+    // ─── COUNT BADGES ─────────────────────────────────────────
+    function updateCounts() {
+        const cats = ['all','plushie','keychain','flower','hat','accessory','merch','clothing','home'];
+        cats.forEach(cat => {
+            const el = document.getElementById('cnt-' + cat);
+            if (el) el.innerText = cat === 'all' ? allProducts.length : allProducts.filter(p => p.cat === cat).length;
+        });
+    }
+
+    // ─── SET CATEGORY ─────────────────────────────────────────
+    function setCategory(cat, el) {
+        currentCategory = cat;
+        // Update all active states
+        document.querySelectorAll('.cat-link, .filter-tab').forEach(b => b.classList.remove('active'));
+        if (el) el.classList.add('active');
+        filterProducts();
+    }
+
+    // ─── SORT ─────────────────────────────────────────────────
+    function sortProducts(val) {
+        currentSort = val;
+        filterProducts();
+    }
+
+    // ─── FILTER + RENDER ──────────────────────────────────────
+    function filterProducts() {
+        const search = document.getElementById('shopSearch').value.toLowerCase();
+        maxPrice = parseInt(document.getElementById('priceRange').value);
+
+        let filtered = allProducts.filter(p => {
+            const matchCat = currentCategory === 'all' || p.cat === currentCategory || (currentCategory === 'wishlist' && wishlist.includes(p.id));
+            const matchSearch = p.name.toLowerCase().includes(search);
+            const matchPrice = p.price <= maxPrice;
+            const matchRating = p.rating >= minRating;
+            return matchCat && matchSearch && matchPrice && matchRating;
+        });
+
+        // Sort
+        if (currentSort === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+        else if (currentSort === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+        else if (currentSort === 'rating') filtered.sort((a,b) => a.rating - b.rating);
+        else if (currentSort === 'newest') filtered.sort((a,b) => (b.new ? 1 : 0) - (a.new ? 1 : 0));
+
+        renderProducts(filtered);
+    }
+
+    // ─── RENDER ───────────────────────────────────────────────
+    function renderProducts(products) {
+        const grid = document.getElementById('productGrid');
+        document.getElementById('resultsCount').innerText = `${products.length} items found`;
+
+        if (products.length === 0) {
+            grid.innerHTML = `<div class="no-results"><div style="font-size:4rem">🧶</div><h3>No items found</h3><p>Try adjusting your filters!</p></div>`;
+            return;
+        }
+
+        grid.innerHTML = products.map(p => {
+            const discount = p.was ? Math.round((1 - p.price/p.was)*100) : 0;
+            const stars = '★'.repeat(Math.round(p.rating)) + '☆'.repeat(5 - Math.round(p.rating));
+            const inWishlist = wishlist.includes(p.id);
+            const isVipOnly = p.vipOnly;
+
+            // Simple VIP check
+            const orders = JSON.parse(localStorage.getItem('bunbabe_orders') || '[]');
+            const session = JSON.parse(localStorage.getItem('bb_session') || 'null');
+            const totalSpent = session ? orders.filter(o => o.customerName === session.firstName).reduce((s,o) => s + Number(o.total||0), 0) : 0;
+            const isVip = totalSpent > 200;
+
+            // + Plus Badge for expensive items
+            const isPlus = p.price > 150;
+            const plusActive = isPlusActive();
+
+            const sizePills = p.sizes ? p.sizes.slice(0,3).map(s => `<span class="size-pill">${s}</span>`).join('') : '';
+            const colorDots = p.colors ? p.colors.slice(0,4).map(c => `<span class="color-swatch" style="background:${c}" onclick="event.stopPropagation(); changeProductColor(${p.id}, '${c}')"></span>`).join('') : '';
+
+            return `
+            <div class="product-card ${isVipOnly && !isVip ? 'locked-vip' : ''} ${isPlus && !plusActive ? 'plus-locked' : ''}" id="pc-${p.id}" onclick="${isPlus && !plusActive ? "checkPlusRequirement('Plus Inventory')" : (isVipOnly && !isVip ? 'openVipModal()' : `openQuickView(${p.id})`)}">
+                ${isPlus && !plusActive ? `
+                    <div class="plus-overlay">
+                        <h4>💎 BunBabe +</h4>
+                        <p style="font-size:0.6rem; margin-bottom:0.5rem;">Exclusive Boutique Item</p>
+                        <button class="btn-plus">Unlock Access</button>
+                    </div>
+                ` : ''}
+                <div class="product-badge-row">
+                    ${p.new ? '<span class="badge badge-new">NEW</span>' : ''}
+                    ${isPlus ? '<span class="plus-badge">PLUS ✨</span>' : ''}
+                    ${isVipOnly ? '<span class="badge" style="background:#5c3a4a; color:white;">👑 VIP</span>' : ''}
+                </div>
+                <button class="wishlist-btn ${inWishlist ? 'active' : ''}" id="wb-${p.id}"
+                    onclick="event.stopPropagation(); toggleWishlist(${p.id})">
+                    ${inWishlist ? '❤️' : '🤍'}
+                </button>
+                <div class="product-img">${p.emoji} ${isVipOnly && !isVip ? '<div class="lock-overlay">🔒</div>' : ''}</div>
+                <div class="product-body">
+                    <div class="product-name">${p.name}</div>
+                    <div class="product-rating">
+                        <span class="stars">${stars}</span>
+                        <span class="rating-count">${p.rating} (${p.reviews})</span>
+                    </div>
+                    <div class="product-pricing">
+                        <span class="price-now">GH₵ ${p.price}</span>
+                        ${p.was ? `<span class="price-was">GH₵ ${p.was}</span><span class="discount-tag">-${discount}%</span>` : ''}
+                    </div>
+                    ${sizePills ? `<div class="size-pills">${sizePills}${p.sizes && p.sizes.length > 3 ? `<span class="size-pill">+${p.sizes.length-3}</span>` : ''}</div>` : ''}
+                    <div class="color-swatches">${colorDots}</div>
+                    <button class="add-cart-btn" onclick="event.stopPropagation(); ${isPlus && !plusActive ? "checkPlusRequirement('Checkout')" : (isVipOnly && !isVip ? 'openVipModal()' : `addToCart('${p.name}', 'GH₵ ${p.price}', '${p.emoji}')`)}">
+                        ${isPlus && !plusActive ? 'Unlock Access 💎' : (isVipOnly && !isVip ? 'VIP Locked 🔒' : p.sub ? 'Subscribe 📦' : 'Add to Cart 🛒')}
+                    </button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ─── PRODUCT COLOR INTERACTION ────────────────────────────
+    function changeProductColor(id, hex) {
+        const card = document.getElementById('pc-' + id);
+        if (!card) return;
+        
+        // Add glowing shadow and pop animation to emoji!
+        const img = card.querySelector('.product-img');
+        img.style.filter = `drop-shadow(0 15px 30px ${hex})`;
+        img.style.transform = 'translateY(-5px) scale(1.1)';
+        img.style.transition = 'all 0.3s ease';
+        setTimeout(() => { img.style.transform = 'translateY(0) scale(1)'; }, 300);
+
+        // Style the button to match the color!
+        const btn = card.querySelector('.add-cart-btn');
+        btn.style.background = hex;
+        btn.style.borderColor = hex;
+        btn.style.color = getContrastYIQ(hex);
+
+        // Update cart logic to include color choice!
+        const name = btn.dataset.baseName;
+        const price = btn.dataset.price;
+        const emoji = btn.dataset.emoji;
+        btn.setAttribute('onclick', `event.stopPropagation(); addToCart('${name} (Color: ${hex})', 'GH₵ ${price}', '${emoji}')`);
+        
+        // Show a mini toast
+        showToast("✨ Color selected!");
+    }
+
+    function getContrastYIQ(hexcolor){
+        hexcolor = hexcolor.replace("#", "");
+        if(hexcolor.length === 3) hexcolor = hexcolor.split('').map(c=>c+c).join('');
+        var r = parseInt(hexcolor.substr(0,2),16);
+        var g = parseInt(hexcolor.substr(2,2),16);
+        var b = parseInt(hexcolor.substr(4,2),16);
+        var yiq = ((r*299)+(g*587)+(b*114))/1000;
+        return (yiq >= 140) ? '#333' : '#fff';
+    }
+
+    // ─── VIP MODAL ─────────────────────────────────────────────
+    function openVipModal() {
+        document.getElementById('vipModalOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeVipModalDirect() {
+        document.getElementById('vipModalOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    function closeVipModal(e) {
+        if (e.target.id === 'vipModalOverlay') closeVipModalDirect();
+    }
+
+    // ─── TOAST NOTIFICATION ────────────────────────────────────
+    function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.innerText = msg;
+        toast.className = "show";
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+
+    // ─── WISHLIST ─────────────────────────────────────────────
+    function toggleWishlist(id) {
+        if (wishlist.includes(id)) {
+            wishlist = wishlist.filter(x => x !== id);
+            document.getElementById('wb-' + id).classList.remove('active');
+            document.getElementById('wb-' + id).innerText = '🤍';
+            const mw = document.getElementById('modal-wb-' + id);
+            if (mw) { mw.classList.remove('active'); mw.innerText = '🤍'; }
+        } else {
+            wishlist.push(id);
+            document.getElementById('wb-' + id).classList.add('active');
+            document.getElementById('wb-' + id).innerText = '❤️';
+            const mw = document.getElementById('modal-wb-' + id);
+            if (mw) { mw.classList.add('active'); mw.innerText = '❤️'; }
+        }
+        localStorage.setItem('bunbabe_wishlist', JSON.stringify(wishlist));
+        if (currentCategory === 'wishlist') filterProducts();
+    }
+
+    // ─── QUICK VIEW ───────────────────────────────────────────
+    function openQuickView(id) {
+        const p = allProducts.find(x => x.id === id);
+        if (!p) return;
+
+        const discount = p.was ? Math.round((1 - p.price/p.was)*100) : 0;
+        const stars = '★'.repeat(Math.round(p.rating)) + '☆'.repeat(5 - Math.round(p.rating));
+
+        const sizeBtns = p.sizes ? p.sizes.map((s,i) =>
+            `<button class="modal-size-btn ${i===0?'selected':''}" onclick="selectSize(this,'${s}')">${s}</button>`).join('') : '<p style="color:var(--text-light); font-size:0.9rem;">One size fits all</p>';
+
+        const colorBtns = p.colors ? p.colors.map((c,i) =>
+            `<button class="modal-color-btn ${i===0?'selected':''}" style="background:${c}" onclick="selectColor(this,'${c}')" title="${c}"></button>`).join('') : '';
+
+        document.getElementById('modalBody').innerHTML = `
+            <div class="modal-emoji">${p.emoji}</div>
+            <h2 style="margin-bottom:0.3rem">${p.name}</h2>
+            <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem;">
+                <span style="color:#f4c430; font-size:1rem">${stars}</span>
+                <span style="color:var(--text-light); font-size:0.85rem">${p.rating} · ${p.reviews} reviews</span>
+                ${p.badge ? `<span style="background:var(--pink-dark); color:white; font-size:0.7rem; padding:2px 8px; border-radius:20px; font-weight:800; text-transform:uppercase">${p.badge}</span>` : ''}
+            </div>
+
+            <div style="background:var(--cream); border-radius:12px; padding:1rem; margin-bottom:1rem;">
+                <div style="display:flex; align-items:baseline; gap:0.5rem;">
+                    <span style="font-family:'Pacifico',cursive; font-size:2rem; color:var(--pink-dark)">GH₵ ${p.price}</span>
+                    ${p.was ? `<span style="text-decoration:line-through; color:var(--text-light)">GH₵ ${p.was}</span>
+                    <span style="background:#ff4757; color:white; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:800">SAVE ${discount}%</span>` : ''}
+                </div>
+            </div>
+
+            ${p.sizes ? `<p style="font-weight:800; margin-bottom:0.5rem">Size:</p><div class="modal-sizes">${sizeBtns}</div>` : ''}
+            ${p.colors ? `<p style="font-weight:800; margin-bottom:0.5rem">Color:</p><div class="modal-colors">${colorBtns}</div>` : ''}
+
+            <p style="color:var(--text-light); font-size:0.9rem; line-height:1.7; margin-bottom:1.5rem">
+                Lovingly handmade with premium yarn, every stitch crafted with care. 
+                Each item is unique — no two are exactly alike! 🧶
+            </p>
+            <div style="display:flex; gap:0.8rem;">
+                <button class="btn" style="flex:1" onclick="addToCart('${p.name}', 'GH₵ ${p.price}', '${p.emoji}'); closeModalDirect()">Add to Cart 🛒</button>
+                <button class="wishlist-btn" style="position:static; box-shadow:none; border:2px solid var(--pink-light); width:48px; height:48px; font-size:1.3rem;"
+                    onclick="toggleWishlist(${p.id})">🤍</button>
+            </div>
+        `;
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function selectSize(btn, size) {
+        btn.closest('.modal-sizes').querySelectorAll('.modal-size-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+    function selectColor(btn, color) {
+        btn.closest('.modal-colors').querySelectorAll('.modal-color-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+    function closeModal(e) {
+        if (e.target.id === 'modalOverlay') document.getElementById('modalOverlay').style.display = 'none';
+    }
+    function closeModalDirect() {
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', initShop);
+    </script>
+
+    <!-- Toast -->
+    <div id="toast" style="display:none; position:fixed; bottom:20px; right:20px; background:var(--pink-dark); color:white; padding:15px 25px; border-radius:12px; font-weight:700; z-index:2000; box-shadow:0 4px 12px rgba(0,0,0,0.15);"></div>
+    <script src="db.js"></script>
+    <script src="cart.js"></script>
+    <script src="features.js"></script>
+
+    <!-- Floating Antigravity Bubble -->
+    <div id="antigravity-bubble" onclick="window.location.href='admin.html#sec-ai'" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; background:#3a2535; border:3px solid var(--pink); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; cursor:pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index:1000; transition:all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        🛸
+    </div>
+    <style>#antigravity-bubble:hover { transform: scale(1.1) rotate(15deg); }</style>
+
+    <!-- ── Cart Drawer ── -->
+    <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+    <div id="cartDrawer" class="cart-drawer">
+        <div class="cart-header">
+            <h3>Your Cart 🛍️</h3>
+            <span class="cart-close" onclick="closeCart()">×</span>
+        </div>
+        <div id="cartItems" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <span>Total:</span>
+                <span id="cartTotal">GH₵ 0</span>
+            </div>
+            <button class="btn cart-checkout-btn" onclick="checkout()">Proceed to Checkout ✨</button>
+        </div>
+    </div>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js');
+        });
+      }
+    </script>
+</body>
+</html>

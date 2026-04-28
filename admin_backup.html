@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin – BunBabe 🧶</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .admin-login {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .admin-login h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-login input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 2px solid var(--pink-light);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        #admin-content {
+            display: none;
+            padding: 2rem 1.5rem;
+        }
+
+        .embed-container {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+            height: 600px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .embed-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logout-btn {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-card h4 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: var(--pink-dark);
+        }
+
+        .customer-list {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .customer-list h4 {
+            margin-bottom: 1rem;
+            color: var(--pink-dark);
+            border-bottom: 1px solid var(--pink-light);
+            padding-bottom: 0.5rem;
+        }
+
+        .customer-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--cream);
+            font-size: 0.95rem;
+        }
+
+        .customer-item:last-child {
+            border-bottom: none;
+        }
+
+        .customer-name {
+            font-weight: 700;
+        }
+
+        .customer-amount {
+            color: var(--pink-dark);
+            font-weight: 800;
+        }
+
+        /* Inventory & Supplies */
+        .admin-section {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-section h3 {
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--pink-dark);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            text-align: left;
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--cream);
+        }
+
+        .admin-table th {
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .editable {
+            background: var(--cream);
+            border: 1px solid var(--pink-light);
+            border-radius: 4px;
+            padding: 2px 5px;
+            width: 50px;
+            text-align: center;
+        }
+
+        .status-pill {
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-high {
+            background: #e6f7ed;
+            color: #2e7d32;
+        }
+
+        .status-low {
+            background: #fff4e5;
+            color: #ed6c02;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="admin-login">
+        <div class="card">
+            <h2>Admin Login 🧶</h2>
+            <p style="margin-bottom: 1rem; font-size: 0.9rem;">Please enter the password to view your shop dashboard.
+            </p>
+            <input type="password" id="admin-pass" placeholder="Password" />
+            <button class="btn" style="width: 100%;" onclick="checkPass()">Login 🎀</button>
+            <p id="error" style="color: #ff4d4d; margin-top: 1rem; font-weight: 700; display: none;">Oops! Wrong
+                password. 🐰</p>
+        </div>
+    </div>
+
+    <!-- Admin Content (hidden by default) -->
+    <div id="admin-content">
+        <div class="container">
+            <div class="admin-header">
+                <a href="index.html" class="nav-logo">
+                    <img src="logo.png" alt="BunBabe Logo">
+                    BunBabe
+                </a>
+                <a href="#" class="logout-btn" onclick="logout()">Logout</a>
+            </div>
+
+
+            <p>Welcome back! Edit your products in the spreadsheet below to update the site.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Revenue</h4>
+                    <div class="stat-value" id="revenue-display">GH₵ 0</div>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">New shop – No data yet ✨
+                    </p>
+                </div>
+                <div class="customer-list">
+                    <h4>Recent Orders</h4>
+                    <div id="orders-list">
+                        <p style="text-align: center; color: var(--text-light); margin-top: 2rem; font-size: 0.9rem;">
+                            Waiting for your first order! 🌸</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section"
+                style="background: linear-gradient(135deg, var(--pink-light), var(--white)); border-color: var(--pink-dark);">
+                <h3>🐰 AI Shop Assistant</h3>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <button class="logout-btn"
+                        style="background: var(--pink-dark); color: var(--white); border: none; cursor: pointer;"
+                        onclick="generateAIReport()">Generate Shop Report 📊</button>
+                    <button class="logout-btn"
+                        style="background: var(--white); color: var(--pink-dark); border: 2px solid var(--pink-dark); cursor: pointer;"
+                        onclick="askAIToSuggest()">What to crochet next? 🧶</button>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <input type="text" id="ai-chat-input"
+                        placeholder="Ask me about pricing, patterns, yarn, or your shop! Type and press enter..."
+                        style="flex: 1; padding: 0.8rem; border: 2px solid var(--pink-light); border-radius: 12px; font-size: 0.9rem;"
+                        onkeypress="if(event.key === 'Enter') handleAIChat()">
+                    <button class="logout-btn"
+                        style="background: var(--pink-dark); color: var(--white); border: none; cursor: pointer; padding: 0 1.5rem;"
+                        onclick="handleAIChat()">Ask 🐰</button>
+                </div>
+
+                <div id="ai-output"
+                    style="background: var(--white); padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; min-height: 80px; max-height: 300px; overflow-y: auto; line-height: 1.5; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                    <em>Beep boop! I'm ready to help you manage your cute shop. Click a button or type a question!
+                        ✨</em>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h3>📦 Inventory Manager</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Stock Level</th>
+                            <th>Status</th>
+                            <th>Last Restock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <h3>🧶 Supplies Tracker</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Supply Name</th>
+                            <th>Quantity</th>
+                            <th>Alert</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="supplies-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="embed-container">
+                <div
+                    style="padding: 10px; background: var(--pink-light); font-size: 0.8rem; font-weight: 700; display: flex; justify-content: space-between;">
+                    <span>Spreadsheet Editor 📝</span>
+                    <span id="sync-status">Status: Live ✓</span>
+                </div>
+                <iframe
+                    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTL3Hlb_Wb-F9Ca9yaW3AvcdQn8YHNkyqP6d6XzfgN0AWQ_MK97BaBr7OTNj0vUr1lv8EH_En2mdI0e/pubhtml?widget=true&amp;headers=false"></iframe>
+            </div>
+
+            <div class="mt-4 text-center">
+                <p style="font-size: 0.9rem;">💡 Tip: You can edit your products directly in Google Sheets. Changes will
+                    reflect on the site after a refresh.</p>
+                <div
+                    style="margin-top: 1rem; padding: 1rem; background: #fff4e5; border-radius: 12px; font-size: 0.85rem; border: 1px solid #ed6c02; text-align: left;">
+                    <strong>⚠️ Local Preview Note:</strong><br>
+                    Because you are opening these files directly from your computer, some browsers block the dynamic
+                    shop data for security (CORS). <br><br>
+                    <strong>How to fix:</strong><br>
+                    1. Upload these files to <strong>GitHub Pages</strong> or <strong>Netlify</strong>.<br>
+                    2. Or use a local "Live Server" extension in VS Code.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PASS = "BunBabe123";
+
+        function checkPass() {
+            const input = document.getElementById('admin-pass').value;
+            const error = document.getElementById('error');
+            const login = document.getElementById('login-screen');
+            const content = document.getElementById('admin-content');
+
+            if (input === PASS) {
+                login.style.display = 'none';
+                content.style.display = 'block';
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                renderAdminData();
+            } else {
+                error.style.display = 'block';
+                document.getElementById('admin-pass').value = '';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            location.reload();
+        }
+
+        // Mock Inventory & Supplies Data (Reset to 0 as requested)
+        const inventory = [
+            { name: "Pink Bunny Plush", stock: 0, lastRestock: "n/a" },
+            { name: "Cream Crochet Hat", stock: 0, lastRestock: "n/a" },
+            { name: "Bunny Keychain", stock: 0, lastRestock: "n/a" },
+            { name: "Pastel Tote Bag", stock: 0, lastRestock: "n/a" }
+        ];
+
+        const supplies = [
+            { name: "Pink Yarn (Cotton)", qty: 0, unit: "skeins" },
+            { name: "Cream Yarn (Cotton)", qty: 0, unit: "skeins" },
+            { name: "Stuffing", qty: 0, unit: "kg" },
+            { name: "Safety Eyes", qty: 0, unit: "pairs" },
+            { name: "Keychain Rings", qty: 0, unit: "pcs" }
+        ];
+
+        function renderAdminData() {
+            // Load Orders from LocalStorage
+            const pastOrders = JSON.parse(localStorage.getItem('bunbabe_orders')) || [];
+
+            // 1. Render Orders List
+            const ordersListEl = document.getElementById('orders-list');
+            if (pastOrders.length === 0) {
+                ordersListEl.innerHTML = '<p style="text-align: center; color: var(--text-light); margin-top: 2rem; font-size: 0.9rem;">Waiting for your first order! 🌸</p>';
+            } else {
+                ordersListEl.innerHTML = pastOrders.map(order => `
+                    <div class="customer-item" style="flex-direction: column; align-items: flex-start; gap: 0.3rem;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span class="customer-name">🥰 ${order.customerName}</span>
+                            <span class="customer-amount">GH₵ ${order.total}</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--text-light);">
+                            <strong>Items:</strong> ${order.items} <br>
+                            <span style="font-size:0.75rem;">${order.id} | ${order.date}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // 2. Render Revenue
+            const totalRevenue = pastOrders.reduce((sum, order) => sum + parseInt(order.total, 10), 0);
+            const revDisplay = document.getElementById('revenue-display');
+            revDisplay.innerText = `GH₵ ${totalRevenue}`;
+            revDisplay.nextElementSibling.innerText = pastOrders.length > 0 ? `${pastOrders.length} order(s) so far ✨` : 'New shop – No data yet ✨';
+
+            // 3. Render Inventory
+            const invBody = document.getElementById('inventory-body');
+            const supBody = document.getElementById('supplies-body');
+
+            invBody.innerHTML = inventory.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td><input type="number" class="editable" value="${item.stock}" onchange="updateStock('${item.name}', this.value)"></td>
+                    <td><span class="status-pill ${item.stock > 10 ? 'status-high' : 'status-low'}">${item.stock > 10 ? 'In Stock' : 'Low Stock'}</span></td>
+                    <td>${item.lastRestock}</td>
+                </tr>
+            `).join('');
+
+            // 4. Render Supplies
+            supBody.innerHTML = supplies.map(item => {
+                const isLow = item.qty < 5 || (item.name === 'Stuffing' && item.qty < 5); // Simple logic
+                return `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.qty} ${item.unit}</td>
+                        <td>${isLow ? '<span style="color: #ff4d4d; font-weight: 700;">🚨 Low Stock!</span>' : '<span style="color: #2e7d32;">✓ Plenty</span>'}</td>
+                        <td>${isLow ? `<button class="logout-btn" style="padding: 2px 10px; font-size: 0.7rem; background: #ed6c02; color: white;" onclick="window.open('https://www.google.com/search?q=buy+${item.name}+crochet+supplies')">Buy Now 🛒</button>` : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateStock(name, newVal) {
+            const item = inventory.find(i => i.name === name);
+            if (item) {
+                item.stock = parseInt(newVal);
+                renderAdminData(); // Re-render to update pills
+            }
+        }
+
+        function generateAIReport() {
+            const aiOutput = document.getElementById('ai-output');
+            aiOutput.innerHTML = "<em>Analyzing shop data... ⏳</em>";
+
+            setTimeout(() => {
+                const totalItems = inventory.reduce((sum, item) => sum + item.stock, 0);
+                const lowSupplies = supplies.filter(s => s.qty === 0).map(s => s.name);
+
+                let report = `<strong>📈 Quick AI Shop Report:</strong><br><br>`;
+                report += `- You currently have <strong>${totalItems}</strong> handmade items in stock.<br>`;
+
+                if (lowSupplies.length > 0) {
+                    report += `- 🚨 <strong>URGENT:</strong> You are completely out of: ${lowSupplies.join(', ')}.<br>`;
+                } else {
+                    report += `- ✅ Your supplies are looking good! No urgent restocks needed.<br>`;
+                }
+
+                report += `- 💡 <strong>Tip:</strong> You haven't had any recent orders. Try posting a TikTok of your plushies!`;
+
+                aiOutput.innerHTML = report;
+            }, 800);
+        }
+
+        function askAIToSuggest() {
+            const aiOutput = document.getElementById('ai-output');
+            aiOutput.innerHTML = "<em>Thinking of cute ideas... 💭🐰</em>";
+
+            setTimeout(() => {
+                let lowestItem = inventory[0];
+                for (let i = 1; i < inventory.length; i++) {
+                    if (inventory[i].stock < lowestItem.stock) {
+                        lowestItem = inventory[i];
+                    }
+                }
+
+                const hasYarn = supplies.some(s => s.name.includes('Yarn') && s.qty > 0);
+                const hasStuffing = supplies.find(s => s.name === "Stuffing");
+
+                let suggestion = `<strong>🧶 AI Suggestion:</strong><br><br>`;
+
+                if (lowestItem && lowestItem.stock === 0) {
+                    suggestion += `You should definitely crochet a <strong>${lowestItem.name}</strong> next! You are completely sold out.<br><br>`;
+
+                    if (!hasYarn || (hasStuffing && hasStuffing.qty === 0)) {
+                        suggestion += `<em>⚠️ Wait! You might need to buy more supplies first. Check your Supplies Tracker!</em>`;
+                    } else {
+                        suggestion += `<em>✨ You have some supplies, so you can get started right away! Happy crocheting!</em>`;
+                    }
+                } else if (lowestItem) {
+                    suggestion += `You have the least amount of <strong>${lowestItem.name}</strong> (${lowestItem.stock} left). That might be a good project to restock!<br>`;
+                } else {
+                    suggestion += `Hmm, maybe try designing a completely new animal! A little frog plush would be adorable 🐸.`;
+                }
+
+                aiOutput.innerHTML = suggestion;
+            }, 1000);
+        }
+
+        function handleAIChat() {
+            const inputEl = document.getElementById('ai-chat-input');
+            const aiOutput = document.getElementById('ai-output');
+            const originalQuestion = inputEl.value;
+            const question = originalQuestion.trim().toLowerCase();
+
+            if (!question) return;
+
+            aiOutput.innerHTML = `<div style="margin-bottom: 1rem;"><strong>You:</strong> ${originalQuestion}</div><em>Thinking... 💭🐰</em>`;
+            inputEl.value = '';
+
+            setTimeout(() => {
+                let response = "";
+
+                // Simple keyword matching for a fun mock AI experience
+                if (question.includes('price') || question.includes('pricing') || question.includes('cost') || question.includes('charge')) {
+                    response = `<strong>🐰 AI:</strong> For pricing hand-crocheted items, a good formula is:<br><strong>(Materials Cost + (Hourly Wage × Hours Spent)) × 1.5</strong>.<br>Don't undersell your craft! For example, if materials cost GH₵ 15, and you spent 3 hours at GH₵ 20/hr, your base cost is GH₵ 75. A retail price of GH₵ 110 - GH₵ 150 is totally fair!`;
+                } else if (question.includes('yarn') || question.includes('material') || question.includes('cotton') || question.includes('wool') || question.includes('acrylic')) {
+                    const hasYarn = supplies.some(s => s.name.includes('Yarn') && s.qty > 0);
+                    if (hasYarn) {
+                        response = `<strong>🐰 AI:</strong> Speaking of yarn, you currently have some in stock! 🥳 <br>Cotton yarn is perfect for amigurumi because it holds its shape well and doesn't pill. Acrylic is softer for wearables. What are you making?`;
+                    } else {
+                        response = `<strong>🐰 AI:</strong> Oh no! You are completely out of yarn. 🚨 You should restock some soft cotton yarn for your plushies, or maybe try some chunky chenille yarn for extra cuddly creations!`;
+                    }
+                } else if (question.includes('pattern') || question.includes('idea') || question.includes('make') || question.includes('crochet next')) {
+                    response = `<strong>🐰 AI:</strong> Need pattern ideas? Since your brand is "BunBabe", how about:<br>- Strawberry Cows 🍓🐄<br>- Giant fluffy bumblebees 🐝<br>- Little potted crochet succulents 🌵<br>- Or a custom Bunny wearing a cute little hat!`;
+                } else if (question.includes('market') || question.includes('sell') || question.includes('customer') || question.includes('promote') || question.includes('tiktok') || question.includes('insta')) {
+                    response = `<strong>🐰 AI:</strong> To get more customers, make sure your photos are bright and colorful. Show scale by holding the plushies. Short videos of you packing orders or stitching the final details do really well on TikTok or Instagram! 📸✨`;
+                } else if (question.includes('hello') || question.includes('hi ') || question.includes('hey')) {
+                    response = `<strong>🐰 AI:</strong> Hi there! I'm your BunBabe AI Assistant. I can help with pricing formulas, project ideas, yarn advice, or analyzing your shop inventory. What do you need? 🌸`;
+                } else if (question.includes('hook') || question.includes('size')) {
+                    response = `<strong>🐰 AI:</strong> For amigurumi and plushies, it's a golden rule to use a hook size 0.5mm to 1.0mm <strong>smaller</strong> than what the yarn label recommends! This keeps your stitches tight so the stuffing doesn't show through. 🪝`;
+                } else {
+                    response = `<strong>🐰 AI:</strong> That's a great question about "${originalQuestion}"! Since I'm a simple mock AI, I might not have the exact answer, but generally in the crochet business, making sure your stitches are tight and your tension is consistent is key! Want to ask me about <strong>pricing</strong>, <strong>patterns</strong>, or <strong>yarn</strong>? 🧶`;
+                }
+
+                aiOutput.innerHTML = `<div style="margin-bottom: 0.5rem; color: var(--text-light);"><strong>You:</strong> ${originalQuestion}</div><div>${response}</div>`;
+                aiOutput.scrollTop = aiOutput.scrollHeight; // Auto-scroll to bottom
+            }, 1200);
+        }
+
+        // Keep logged in for the session
+        window.onload = function () {
+            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                renderAdminData();
+            }
+        }
+    </script>
+</body>
+
+</html>

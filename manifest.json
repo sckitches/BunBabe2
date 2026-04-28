@@ -1,0 +1,21 @@
+{
+  "name": "BunBabe 🧶",
+  "short_name": "BunBabe",
+  "description": "Handmade Crochet Cuties Made With Love",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#fff8f9",
+  "theme_color": "#f59fb0",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

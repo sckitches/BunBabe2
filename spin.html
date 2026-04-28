@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spin & Win – BunBabe 🎡</title>
+    <meta name="description" content="Spin the BunBabe wheel to win exclusive holiday discounts! Black Friday, Christmas, and more." />
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body { overflow-x: hidden; }
+
+        /* ── Page Hero ── */
+        .spin-hero {
+            text-align: center;
+            padding: 3rem 1.5rem 1rem;
+            background: radial-gradient(ellipse at 60% 30%, #ffe4ea 0%, var(--cream) 70%);
+        }
+        .spin-hero .event-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 6px 18px;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,71,87,0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(255,71,87,0); }
+        }
+
+        /* ── Events Bar ── */
+        .events-bar {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            padding: 1rem 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .event-pill {
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .event-pill.black-friday  { background: #1a1a1a; color: #ffd700; border-color: #ffd700; }
+        .event-pill.christmas     { background: #c8001a; color: #fff; border-color: #ffd700; }
+        .event-pill.valentines    { background: #ff4b7b; color: #fff; border-color: #ffb3c6; }
+        .event-pill.easter        { background: #a29bfe; color: #fff; border-color: #fdcb6e; }
+        .event-pill.birthday      { background: #fd9644; color: #fff; border-color: #fff; }
+        .event-pill.default-event { background: var(--pink-dark); color: #fff; border-color: var(--pink-light); }
+        .event-pill.active { transform: scale(1.1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+
+        /* ── Wheel Container ── */
+        .wheel-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem 4rem;
+            gap: 2rem;
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Outer glow ring */
+        .wheel-glow {
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: conic-gradient(var(--glow1, #ffc0cb), var(--glow2, #ffd700), var(--glow1, #ffc0cb));
+            animation: glowSpin 8s linear infinite;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+        @keyframes glowSpin { to { transform: rotate(360deg); } }
+
+        /* Wheel Canvas */
+        #wheelCanvas {
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 10px 40px rgba(0,0,0,0.25));
+            border-radius: 50%;
+            transition: filter 0.3s;
+        }
+        #wheelCanvas.spinning { filter: drop-shadow(0 15px 50px rgba(245,159,176,0.6)); }
+
+        /* Pointer */
+        .wheel-pointer {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 2.5rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            animation: pointerBounce 1.5s ease-in-out infinite;
+        }
+        @keyframes pointerBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-6px); }
+        }
+
+        /* Spin Button */
+        .spin-btn {
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white;
+            border: none;
+            padding: 1rem 3.5rem;
+            border-radius: 50px;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(255,71,87,0.4);
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+        .spin-btn:hover { transform: scale(1.05); box-shadow: 0 12px 40px rgba(255,71,87,0.5); }
+        .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Spins Left */
+        .spins-left {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 700;
+            background: var(--white);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            border: 2px solid var(--pink-light);
+        }
+
+        /* ── Prize Panel ── */
+        .prize-panel {
+            display: none;
+            text-align: center;
+            background: var(--white);
+            border: 3px solid var(--pink-light);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: var(--shadow);
+            animation: prizePop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes prizePop {
+            from { transform: scale(0.5); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+        .prize-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,192,203,0.1), rgba(255,215,0,0.1));
+            pointer-events: none;
+        }
+        .prize-emoji { font-size: 4rem; margin-bottom: 0.5rem; }
+        .prize-title { font-family: 'Pacifico', cursive; font-size: 1.8rem; color: var(--pink-dark); margin-bottom: 0.5rem; }
+        .prize-desc { color: var(--text-light); margin-bottom: 1.5rem; }
+        .coupon-box {
+            background: var(--cream);
+            border: 2px dashed var(--pink-dark);
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .coupon-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-light); }
+        .coupon-code {
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: var(--pink-dark);
+            letter-spacing: 3px;
+        }
+        .coupon-expires { font-size: 0.78rem; color: var(--text-light); margin-top: 0.3rem; }
+        .copy-btn {
+            background: var(--pink-dark);
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        /* ── Prizes List ── */
+        .prizes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            max-width: 700px;
+            width: 100%;
+        }
+        .prize-item {
+            background: var(--white);
+            border: 2px solid var(--pink-light);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .prize-item:hover { transform: translateY(-3px); }
+        .prize-item-emoji { font-size: 1.8rem; }
+        .prize-item-name { font-weight: 800; font-size: 0.85rem; margin-top: 0.3rem; }
+        .prize-item-odds { font-size: 0.72rem; color: var(--text-light); }
+        .prize-item.grand { border-color: #ffd700; background: #fffbea; }
+        .prize-item.grand .prize-item-name { color: #b8860b; }
+
+        /* ── Confetti ── */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            animation: confettiFall linear forwards;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ── Past Wins Ticker ── */
+        .ticker-wrap {
+            background: var(--pink-dark);
+            color: white;
+            padding: 0.6rem 0;
+            overflow: hidden;
+            width: 100%;
+        }
+        .ticker {
+            display: flex;
+            gap: 3rem;
+            animation: ticker 20s linear infinite;
+            white-space: nowrap;
+        }
+        @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .ticker-item { font-size: 0.85rem; font-weight: 700; }
+
+        /* ── Holiday Banner ── */
+        .holiday-banner {
+            text-align: center;
+            padding: 0.8rem 1.5rem;
+            font-weight: 800;
+            font-size: 1rem;
+            color: white;
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            transition: background 0.5s;
+        }
+        .holiday-banner.christmas { background: linear-gradient(135deg, #c8001a, #2e7d32); }
+        .holiday-banner.valentines { background: linear-gradient(135deg, #ff4b7b, #c0392b); }
+        .holiday-banner.easter { background: linear-gradient(135deg, #a29bfe, #fdcb6e); }
+        .holiday-banner.birthday { background: linear-gradient(135deg, #fd9644, #e84393); }
+        .holiday-banner.default-event { background: linear-gradient(135deg, var(--pink-dark), #e88d9f); }
+        #holidayBannerText { transition: opacity 0.3s; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="BunBabe Logo"> BunBabe
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="spin.html" class="active">🎡 Spin & Win</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a class="nav-cart" onclick="toggleCart()">🛒 <span class="cart-badge">0</span></a>
+    </nav>
+
+    <!-- Holiday Banner -->
+    <div class="holiday-banner default-event" id="holidayBanner">
+        <span id="holidayBannerText">🎀 BUNBABE SPECIAL EVENT — Spin the wheel to win discounts up to 50% OFF! 🎀</span>
+    </div>
+
+    <!-- Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker" id="winTicker">
+            <span class="ticker-item">🎉 Akosua just won 30% OFF!</span>
+            <span class="ticker-item">🌸 Abena just won 20% OFF!</span>
+            <span class="ticker-item">✨ Efua just won FREE SHIPPING!</span>
+            <span class="ticker-item">🎊 Adwoa just won 50% OFF!</span>
+            <span class="ticker-item">🏆 Ama just won BUY 1 GET 1!</span>
+            <span class="ticker-item">🎉 Kukua just won 10% OFF!</span>
+            <span class="ticker-item">🌸 Maame just won 15% OFF!</span>
+            <span class="ticker-item">✨ Yaa just won 5% OFF!</span>
+            <!-- Duplicated for seamless loop -->
+            <span class="ticker-item">🎉 Akosua just won 30% OFF!</span>
+            <span class="ticker-item">🌸 Abena just won 20% OFF!</span>
+            <span class="ticker-item">✨ Efua just won FREE SHIPPING!</span>
+            <span class="ticker-item">🎊 Adwoa just won 50% OFF!</span>
+            <span class="ticker-item">🏆 Ama just won BUY 1 GET 1!</span>
+            <span class="ticker-item">🎉 Kukua just won 10% OFF!</span>
+            <span class="ticker-item">🌸 Maame just won 15% OFF!</span>
+            <span class="ticker-item">✨ Yaa just won 5% OFF!</span>
+        </div>
+    </div>
+
+    <main>
+        <section class="spin-hero">
+            <div class="event-badge" id="eventBadge">🎀 BunBabe Special Event</div>
+            <h1>Spin & Win! 🎡</h1>
+            <p>Spin the lucky wheel once per day to win exclusive discounts!</p>
+        </section>
+
+        <!-- Events Bar -->
+        <div class="events-bar">
+            <button class="event-pill default-event active" onclick="setEvent('default')">🎀 BunBabe Day</button>
+            <button class="event-pill black-friday"  onclick="setEvent('black-friday')">🖤 Black Friday</button>
+            <button class="event-pill christmas"     onclick="setEvent('christmas')">🎄 Christmas</button>
+            <button class="event-pill valentines"    onclick="setEvent('valentines')">💝 Valentine's</button>
+            <button class="event-pill easter"        onclick="setEvent('easter')">🐣 Easter</button>
+            <button class="event-pill birthday"      onclick="setEvent('birthday')">🎂 Birthday</button>
+        </div>
+
+        <div class="wheel-section">
+            <!-- Wheel -->
+            <div class="wheel-wrapper">
+                <div class="wheel-glow" id="wheelGlow"></div>
+                <div class="wheel-pointer">👆</div>
+                <canvas id="wheelCanvas" width="380" height="380"></canvas>
+            </div>
+
+            <!-- Spin Controls -->
+            <button class="spin-btn" id="spinBtn" onclick="spinWheel()">SPIN! 🎡</button>
+            <div class="spins-left" id="spinsLeftBadge">⭐ 1 Free Spin Today</div>
+
+            <!-- Prize Panel (shown after spin) -->
+            <div class="prize-panel" id="prizePanel">
+                <div class="prize-emoji" id="prizeEmoji">🎉</div>
+                <div class="prize-title" id="prizeTitle">You Won!</div>
+                <div class="prize-desc" id="prizeDesc">Congratulations!</div>
+                <div class="coupon-box">
+                    <div class="coupon-label">Your Coupon Code</div>
+                    <div class="coupon-code" id="couponCode">BUNBABE20</div>
+                    <div class="coupon-expires" id="couponExpires">Expires in 24 hours</div>
+                    <button class="copy-btn" onclick="copyCoupon()">📋 Copy Code</button>
+                </div>
+                <a href="shop.html" class="btn" style="display:block; text-align:center;">Shop Now 🛍️</a>
+            </div>
+
+            <!-- All Prizes List -->
+            <h2 style="margin-top:1rem; text-align:center;">All Possible Prizes 🏆</h2>
+            <p class="text-center" style="margin-bottom:1.5rem; color:var(--text-light);">Every spin wins something — no blanks!</p>
+            <div class="prizes-list" id="prizesList"></div>
+        </div>
+    </main>
+
+    <footer>
+        <span>© 2026 BunBabe.</span> All rights reserved. Made with 💗
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+    <div id="cartDrawer" class="cart-drawer">
+        <div class="cart-header">
+            <h3>Your Cart 🛍️</h3>
+            <span class="cart-close" onclick="closeCart()">×</span>
+        </div>
+        <div id="cartItems" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <span>Total:</span><span id="cartTotal">GH₵ 0</span>
+            </div>
+            <button class="btn cart-checkout-btn" onclick="checkout()">Proceed to Checkout ✨</button>
+        </div>
+    </div>
+    <div id="toast" style="display:none; position:fixed; bottom:20px; right:20px; background:var(--pink-dark); color:white; padding:15px 25px; border-radius:12px; font-weight:700; z-index:2000;"></div>
+
+    <script>
+    // ─── PRIZE DATA ──────────────────────────────────────────────
+    // ─── PRIZE DATA (DYNAMICALLY LOADED) ─────────────────────────
+    const DEFAULT_PRIZES = [
+        { label: '50% OFF', emoji: '🏆', code: 'BBBIG50',   color: '#ff4757', textColor: '#fff', desc: 'Half price on your entire order! Biggest deal of the season.', odds: 'Rare 2%',  grand: true  },
+        { label: '30% OFF', emoji: '🎊', code: 'BUNBABE30', color: '#ff6b81', textColor: '#fff', desc: '30% off storewide — stock up on your favourites!', odds: 'Uncommon 8%',  grand: false },
+        { label: '20% OFF', emoji: '🌸', code: 'BUNBABE20', color: '#ffc0cb', textColor: '#5c3a4a', desc: '20% off your next order. Happy shopping!', odds: 'Common 18%', grand: false },
+        { label: '15% OFF', emoji: '🎀', code: 'BUNBABE15', color: '#f59fb0', textColor: '#fff', desc: '15% off your entire cart. Treat yourself!', odds: 'Common 18%', grand: false },
+        { label: '10% OFF', emoji: '✨', code: 'BUNBABE10', color: '#a29bfe', textColor: '#fff', desc: '10% off — every little bit counts!', odds: 'Common 20%', grand: false },
+        { label: 'FREE\nSHIPPING', emoji: '📦', code: 'BBFREESHIP', color: '#55efc4', textColor: '#2d3436', desc: 'Free delivery on your order!', odds: 'Uncommon 10%', grand: false },
+        { label: 'MYSTERY\nGIFT',  emoji: '🎁', code: 'BBMYSTERY', color: '#fd79a8', textColor: '#fff', desc: 'A mystery BunBabe gift added to your order!', odds: 'Rare 5%', grand: true  },
+    ];
+
+    let PRIZES = [...DEFAULT_PRIZES];
+
+    // Load admin coupons and inject them into the wheel
+    const adminCoupons = JSON.parse(localStorage.getItem('bunbabe_coupons') || '[]');
+    const activeAdminCoupons = adminCoupons.filter(c => c.active);
+
+    if (activeAdminCoupons.length > 0) {
+        // Map admin coupons to wheel prizes (take last 3 active ones to keep wheel clean)
+        const injected = activeAdminCoupons.slice(-3).map(c => ({
+            label: `${c.discount}% OFF`,
+            emoji: '🎟️',
+            code: c.code,
+            color: '#fdcb6e',
+            textColor: '#5c3a4a',
+            desc: `Won a custom ${c.discount}% discount code from our admin!`,
+            odds: 'Special',
+            grand: c.discount >= 25
+        }));
+        // Merge - replacing some common defaults or just prepending
+        PRIZES = [...injected, ...DEFAULT_PRIZES].slice(0, 10);
+    }
+
+
+    // ─── EVENT THEMES ─────────────────────────────────────────────
+    const EVENTS = {
+        'default':      { name: '🎀 BunBabe Day',   banner: '🎀 BUNBABE SPECIAL EVENT — Spin the wheel to win discounts up to 50% OFF! 🎀', badge: '🎀 BunBabe Day',    glow1: '#ffc0cb', glow2: '#ffd700', bannerClass: 'default-event' },
+        'black-friday': { name: '🖤 Black Friday',   banner: '🖤 BLACK FRIDAY SALE — Spin to WIN up to 50% OFF! Limited spins available!', badge: '🖤 BLACK FRIDAY',  glow1: '#ffd700', glow2: '#333',    bannerClass: 'black-friday' },
+        'christmas':    { name: '🎄 Christmas Sale', banner: '🎄 HO HO HO! Spin for your Christmas discount — up to 50% OFF! 🎅', badge: '🎄 CHRISTMAS',      glow1: '#ff0000', glow2: '#00aa44', bannerClass: 'christmas' },
+        'valentines':   { name: '💝 Valentine\'s',   banner: '💝 SPREAD THE LOVE — Spin for a Valentine\'s surprise up to 50% OFF! 💕', badge: '💝 VALENTINE\'S',   glow1: '#ff4b7b', glow2: '#ffc0cb', bannerClass: 'valentines' },
+        'easter':       { name: '🐣 Easter Sale',    banner: '🐣 EASTER SURPRISE — Hop over and spin the egg wheel for up to 50% OFF! 🌸', badge: '🐣 EASTER',          glow1: '#a29bfe', glow2: '#fdcb6e', bannerClass: 'easter' },
+        'birthday':     { name: '🎂 Birthday Bash',  banner: '🎂 HAPPY BIRTHDAY FROM BUNBABE! Spin for a special birthday discount! 🎉', badge: '🎂 BIRTHDAY BASH',  glow1: '#fd9644', glow2: '#e84393', bannerClass: 'birthday' },
+    };
+
+    // ─── STATE ────────────────────────────────────────────────────
+    let currentAngle = 0;
+    let isSpinning   = false;
+    let currentEvent = 'default';
+    let hasSpunToday = false;
+    let wonIndex     = -1;
+
+    // Check if already spun today
+    const lastSpin = localStorage.getItem('bunbabe_last_spin');
+    if (lastSpin === new Date().toDateString()) {
+        hasSpunToday = true;
+    }
+
+    // ─── CANVAS SETUP ─────────────────────────────────────────────
+    const canvas  = document.getElementById('wheelCanvas');
+    const ctx     = canvas.getContext('2d');
+    const cx      = canvas.width  / 2;
+    const cy      = canvas.height / 2;
+    const radius  = cx - 10;
+    const arc     = (2 * Math.PI) / PRIZES.length;
+
+    function drawWheel(angle) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Outer shadow ring
+        ctx.save();
+        ctx.shadowColor = 'rgba(245,159,176,0.5)';
+        ctx.shadowBlur  = 30;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius + 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        ctx.restore();
+
+        // Segments
+        PRIZES.forEach((prize, i) => {
+            const startAngle = angle + arc * i;
+            const endAngle   = startAngle + arc;
+
+            // Segment fill
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, radius, startAngle, endAngle);
+            ctx.closePath();
+            ctx.fillStyle = prize.color;
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth   = 3;
+            ctx.stroke();
+
+            // Segment label
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(startAngle + arc / 2);
+            ctx.textAlign = 'right';
+            ctx.fillStyle = prize.textColor;
+            ctx.font       = `bold ${prize.label.includes('\n') ? 10 : 13}px Nunito, sans-serif`;
+
+            const lines = prize.label.split('\n');
+            if (lines.length > 1) {
+                ctx.fillText(lines[0], radius - 14, -6);
+                ctx.fillText(lines[1], radius - 14,  8);
+            } else {
+                ctx.fillText(lines[0], radius - 14, 4);
+            }
+
+            // Emoji
+            ctx.font = '18px serif';
+            ctx.fillText(prize.emoji, radius - 60, 6);
+
+            ctx.restore();
+        });
+
+        // Centre hub
+        ctx.beginPath();
+        ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+        const hubGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 28);
+        hubGrad.addColorStop(0, '#fff');
+        hubGrad.addColorStop(1, '#ffc0cb');
+        ctx.fillStyle = hubGrad;
+        ctx.fill();
+        ctx.strokeStyle = '#f59fb0';
+        ctx.lineWidth   = 3;
+        ctx.stroke();
+
+        // BunBabe Logo text centre
+        ctx.font      = 'bold 8px Nunito, sans-serif';
+        ctx.fillStyle = '#5c3a4a';
+        ctx.textAlign = 'center';
+        ctx.fillText('BunBabe', cx, cy + 3);
+    }
+
+    // ─── SPIN LOGIC ───────────────────────────────────────────────
+    function spinWheel() {
+        if (isSpinning) return;
+        if (hasSpunToday) {
+            showToast('You already spun today! Come back tomorrow 💗');
+            return;
+        }
+
+        isSpinning = true;
+        document.getElementById('spinBtn').disabled = true;
+        document.getElementById('prizePanel').style.display = 'none';
+        canvas.classList.add('spinning');
+
+        // Pick random prize uniformly (or you could assign custom weights to admin coupons)
+        const chosen = Math.floor(Math.random() * PRIZES.length);
+
+
+        // Target angle: land chosen segment under top pointer
+        const fullRotations = 5 + Math.floor(Math.random() * 4); // 5-8 spins
+        const segmentMiddle = -(arc * chosen + arc / 2);
+        const targetAngle   = currentAngle + fullRotations * 2 * Math.PI + segmentMiddle - currentAngle % (2 * Math.PI);
+
+        const duration  = 5000 + Math.random() * 2000;
+        const startTime = performance.now();
+        const startAngle = currentAngle;
+
+        function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+
+        function animate(now) {
+            const elapsed  = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            currentAngle   = startAngle + (targetAngle - startAngle) * easeOut(progress);
+            drawWheel(currentAngle);
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                isSpinning = false;
+                canvas.classList.remove('spinning');
+                wonIndex = chosen;
+                showPrize(chosen);
+                spawnConfetti();
+                localStorage.setItem('bunbabe_last_spin', new Date().toDateString());
+                hasSpunToday = true;
+                updateSpinButton();
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    // ─── SHOW PRIZE ───────────────────────────────────────────────
+    function showPrize(i) {
+        const prize = PRIZES[i];
+        document.getElementById('prizeEmoji').innerText = prize.emoji;
+        document.getElementById('prizeTitle').innerText = `You Won ${prize.label.replace('\n', ' ')}!`;
+        document.getElementById('prizeDesc').innerText  = prize.desc;
+        document.getElementById('couponCode').innerText = prize.code;
+
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 1);
+        document.getElementById('couponExpires').innerText = `Expires: ${expiry.toLocaleDateString()}`;
+
+        const panel = document.getElementById('prizePanel');
+        panel.style.display = 'block';
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        showToast(`🎉 Congrats! You won ${prize.label.replace('\n',' ')}!`);
+    }
+
+    // ─── COPY COUPON ─────────────────────────────────────────────
+    function copyCoupon() {
+        const code = document.getElementById('couponCode').innerText;
+        navigator.clipboard.writeText(code).then(() => showToast('✅ Coupon code copied!'));
+    }
+
+    // ─── CONFETTI ────────────────────────────────────────────────
+    function spawnConfetti() {
+        const colors = ['#ffc0cb','#ffd700','#ff4757','#a29bfe','#55efc4','#fd79a8','#fdcb6e'];
+        for (let i = 0; i < 120; i++) {
+            setTimeout(() => {
+                const el  = document.createElement('div');
+                el.className = 'confetti-piece';
+                el.style.left     = Math.random() * 100 + 'vw';
+                el.style.top      = '-20px';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                el.style.width    = (Math.random() * 10 + 6) + 'px';
+                el.style.height   = (Math.random() * 10 + 6) + 'px';
+                el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                el.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 4000);
+            }, i * 20);
+        }
+    }
+
+    // ─── SPIN BUTTON STATE ────────────────────────────────────────
+    function updateSpinButton() {
+        const btn   = document.getElementById('spinBtn');
+        const badge = document.getElementById('spinsLeftBadge');
+        if (hasSpunToday) {
+            btn.disabled       = true;
+            btn.innerText      = 'Come Back Tomorrow! 💗';
+            badge.innerText    = '⏰ Next spin: Tomorrow';
+        } else {
+            btn.disabled       = false;
+            btn.innerText      = 'SPIN! 🎡';
+            badge.innerText    = '⭐ 1 Free Spin Today';
+        }
+    }
+
+    // ─── EVENT THEME ─────────────────────────────────────────────
+    function setEvent(key) {
+        currentEvent = key;
+        const ev = EVENTS[key];
+
+        // Banner
+        const banner = document.getElementById('holidayBanner');
+        banner.className = 'holiday-banner ' + ev.bannerClass;
+        document.getElementById('holidayBannerText').innerText = ev.banner;
+
+        // Event Badge
+        document.getElementById('eventBadge').innerText = ev.badge;
+
+        // Glow colours (CSS vars via style)
+        document.getElementById('wheelGlow').style.setProperty('--glow1', ev.glow1);
+        document.getElementById('wheelGlow').style.setProperty('--glow2', ev.glow2);
+        document.getElementById('wheelGlow').style.background =
+            `conic-gradient(${ev.glow1}, ${ev.glow2}, ${ev.glow1})`;
+
+        // Tab pills
+        document.querySelectorAll('.event-pill').forEach(p => p.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    // ─── BUILD PRIZES LIST ───────────────────────────────────────
+    function buildPrizesList() {
+        document.getElementById('prizesList').innerHTML = PRIZES.map(p => `
+            <div class="prize-item ${p.grand ? 'grand' : ''}">
+                <div class="prize-item-emoji">${p.emoji}</div>
+                <div class="prize-item-name" style="color:${p.color === '#ffc0cb' ? 'var(--pink-dark)' : p.color}">${p.label.replace('\n',' ')}</div>
+                <div class="prize-item-odds">${p.odds}</div>
+            </div>
+        `).join('');
+    }
+
+    // ─── TOAST ───────────────────────────────────────────────────
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText    = msg;
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 3500);
+    }
+
+    // ─── INIT ─────────────────────────────────────────────────────
+    drawWheel(0);
+    buildPrizesList();
+    updateSpinButton();
+    </script>
+
+    <script src="cart.js"></script>
+    <script src="features.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+        }
+    </script>
+</body>
+</html>

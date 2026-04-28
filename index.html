@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BunBabe 🧶 – Handmade Crochet Cuties</title>
+  <meta name="description"
+    content="BunBabe – Handmade crochet cuties made with love. Discover adorable plushies, keychains, and yarn flowers." />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(ellipse at 60% 40%, #ffe4ea 0%, var(--cream) 70%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+    }
+
+    .hero::before {
+      width: 420px;
+      height: 420px;
+      background: var(--pink);
+      top: -100px;
+      right: -100px;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .hero::after {
+      width: 280px;
+      height: 280px;
+      background: var(--pink-dark);
+      bottom: -80px;
+      left: -60px;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--text-light);
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .badge {
+      background: var(--white);
+      border: 2px solid var(--pink-light);
+      color: var(--text-light);
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 50px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      padding: 3rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 2px solid var(--pink-light);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 0.3rem;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="logo" href="index.html">
+      BunBabe
+    </a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="spin.html">🎡 Spin & Win</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    <a class="nav-cart" onclick="toggleCart()">
+      🛒 <span class="cart-badge">0</span>
+    </a>
+  </nav>
+
+  <main>
+    <!-- ── Exclusive Drop Banner ── -->
+    <div style="background: var(--text); color: var(--white); padding: 0.8rem; text-align: center; font-size: 0.85rem; font-weight: 700;">
+      ✨ NEXT EXCLUSIVE DROP IN: <span id="drop-timer" style="color: var(--gold);">00:00:00</span> — <a href="shop.html" style="color: var(--pink-light); text-decoration: underline;">GET READY</a> ✨
+    </div>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>BunBabe 🧶</h1>
+        <p class="hero-subtitle">Handmade Crochet Cuties Made With Love 💗</p>
+        <div class="badge-row">
+          <span class="badge">🐰 Plushies</span>
+          <span class="badge">🍓 Keychains</span>
+          <span class="badge">🌼 Flowers</span>
+          <span class="badge">✨ Made to Order</span>
+        </div>
+        <a href="shop.html" class="btn">Shop Now 🛍️</a>
+      </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+          <div class="feature-icon">🧶</div>
+          <h3>Handmade</h3>
+          <p>Every piece is lovingly crocheted by hand, one stitch at a time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💌</div>
+          <h3>Made With Love</h3>
+          <p>Each item comes wrapped with extra care just for you.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎀</div>
+          <h3>Perfect Gifts</h3>
+          <p>Adorable keepsakes for any occasion or just because!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BunBabe + Executive Advert ── -->
+    <section id="plus-teaser" class="container" style="margin-bottom: 3rem;">
+        <div style="background: linear-gradient(135deg, #1a0f14, #2d1b24); border-radius: 32px; padding: 4rem 2rem; text-align: center; color: white; position: relative; overflow: hidden; border: 3px solid var(--gold);">
+            <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.1; transform: rotate(15deg);">👑</div>
+            <h2 style="font-family: 'Pacifico', cursive; color: white; margin-bottom: 1rem; font-size: 3rem;">Unlock BunBabe <span style="color:var(--gold)">+</span></h2>
+            <p style="max-width: 600px; margin: 0 auto 2.5rem; font-size: 1.1rem; line-height: 1.6; color: rgba(255,255,255,0.8);">
+                Join the elite circle. Get unlimited daily spins, permanent 20% discounts, monthly mystery gift boxes, and free delivery on all orders.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="membership.html" class="btn" style="background: var(--gold); color: #1a0f14; box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);">Upgrade to Plus 👑</a>
+                <a href="membership.html" class="btn" style="background: rgba(255,255,255,0.1); border: 2px solid white; color: white; box-shadow: none;">See All Perks ✨</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Plus Only Features (Teaser) ── -->
+    <section class="container" style="padding-top: 0;">
+        <h2 class="text-center">Executive Features 💎</h2>
+        <p class="text-center" style="margin-bottom: 2rem;">Exclusive boutique experiences for our Plus members.</p>
+        <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+            <div class="feature-card plus-locked" onclick="checkPlusRequirement('Executive Music Player')">
+                <div class="plus-overlay">
+                    <h4>💎 Plus Only</h4>
+                    <a href="membership.html" class="btn-plus">Unlock Now</a>
+                </div>
+                <div class="feature-icon">🎵</div>
+                <h3>Executive Beats</h3>
+                <p>Unlock the member-only Lo-Fi player for a cozy shopping vibe.</p>
+            </div>
+            <div class="feature-card plus-locked" onclick="checkPlusRequirement('Priority Crafting')">
+                <div class="plus-overlay">
+                    <h4>💎 Plus Only</h4>
+                    <a href="membership.html" class="btn-plus">Unlock Now</a>
+                </div>
+                <div class="feature-icon">⚡</div>
+                <h3>Priority Crafting</h3>
+                <p>Jump to the front of the queue with priority assembly on all items.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Merchandise Ads ── -->
+    <section class="merch-ads">
+      <div class="container text-center">
+        <h2>BunBabe Merchandise ✨</h2>
+        <p>Take the cuteness with you everywhere with our exclusive merch!</p>
+
+        <div class="merch-grid">
+          <div class="merch-ad-card">
+            <img src="merch_hoodie_1776542697000.png" alt="BunBabe Hoodie" class="merch-ad-image">
+            <div class="merch-ad-info">
+              <span class="merch-ad-tag">Top Seller</span>
+              <h3>Signature Hoodie</h3>
+              <p>Ultra-soft cream hoodie with embroidered bunny logo. Perfect for cozy days.</p>
+              <a href="shop.html" class="btn btn-sm mt-3">View Details</a>
+            </div>
+          </div>
+
+          <div class="merch-ad-card">
+            <img src="merch_school_bag_1776542538834.png" alt="BunBabe School Bag" class="merch-ad-image">
+            <div class="merch-ad-info">
+              <span class="merch-ad-tag">Limited Edition</span>
+              <h3>School Backpack</h3>
+              <p>Durable and stylish backpack featuring our signature crochet bunny charm.</p>
+              <a href="shop.html" class="btn btn-sm mt-3">Shop Now</a>
+            </div>
+          </div>
+
+          <div class="merch-ad-card">
+            <img src="merch_bottle_1776542835932.png" alt="BunBabe Bottle" class="merch-ad-image">
+            <div class="merch-ad-info">
+              <span class="merch-ad-tag">Must Have</span>
+              <h3>Hydration Bottle</h3>
+              <p>Stay hydrated with our premium matte-finish bunny water bottle.</p>
+              <a href="shop.html" class="btn btn-sm mt-3">Grab Yours</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Reviews ── -->
+    <section style="background: var(--white); padding: 4rem 1.5rem;">
+      <div class="container text-center">
+        <h2>Wall of Love ❤️</h2>
+        <p>What our happy customers are saying about their BunBabe cuties!</p>
+
+        <div class="reviews-grid">
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"The softest bunny I've ever owned! You can really feel the love in every stitch. It
+              arrived beautifully wrapped too!"</p>
+            <span class="review-author">— Sarah L.</span>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"I bought the strawberry keychain for my backpack and I get compliments everywhere.
+              It's so tiny and precious!"</p>
+            <span class="review-author">— James K.</span>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"The flower bouquet I ordered for my mom's birthday was a hit. She loves that they
+              will never wilt!"</p>
+            <span class="review-author">— Amara O.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <!-- ── Maker's Diary ── -->
+    <section class="diary-section" style="background: var(--cream);">
+      <div class="container">
+        <h2 class="text-center">Maker's Diary 📖</h2>
+        <p class="text-center mb-5">A peek behind the stitches...</p>
+
+        <div class="diary-entry">
+          <div class="diary-image-container">
+            <div class="diary-image" style="background: url('https://images.unsplash.com/photo-1605367031756-3c0813943361?auto=format&fit=crop&q=80&w=800') center/cover;"></div>
+          </div>
+          <div class="diary-text">
+            <h3>🧶 The First Stitch</h3>
+            <p>It all began with a single pink ball of velvet yarn. I remember spending hours getting the bunny ears just right. Today, that same passion goes into every single item we ship!</p>
+            <small>April 12, 2026</small>
+          </div>
+        </div>
+
+        <div class="diary-entry">
+          <div class="diary-image-container">
+            <div class="diary-image" style="background: url('https://images.unsplash.com/photo-1584992236310-6edddc085ffb?auto=format&fit=crop&q=80&w=800') center/cover;"></div>
+          </div>
+          <div class="diary-text">
+            <h3>🍓 Strawberry Season</h3>
+            <p>The Strawberry Cow has officially become our most loved cutie! Designing her took three different prototypes to get the perfect "squish" factor. We're so glad you love her as much as we do.</p>
+            <small>April 18, 2026</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BunBabe + Membership Section ── -->
+    <section id="join-plus" style="background: var(--gold-light); padding: 5rem 1.5rem; border-top: 5px solid var(--gold);">
+      <div class="container text-center" style="max-width: 800px;">
+        <h2 style="font-family: 'Pacifico', cursive; color: var(--text);">Step Into the Luxury of <span style="color:var(--gold)">BunBabe +</span> 💎</h2>
+        <p class="mb-5">Our exclusive membership for true crochet collectors. Get the elite treatment you deserve.</p>
+        
+        <div class="plus-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+          <div class="plus-card" style="padding: 2rem; border-radius: 24px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎨</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Exclusive Drops</h3>
+            <p style="font-size: 0.85rem;">Access our most rare, golden-tier inventory before anyone else.</p>
+          </div>
+          <div class="plus-card" style="padding: 2rem; border-radius: 24px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎵</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Executive Beats</h3>
+            <p style="font-size: 0.85rem;">Unlock the member-only Lo-Fi player for a cozy shopping vibe.</p>
+          </div>
+          <div class="plus-card" style="padding: 2rem; border-radius: 24px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🛸</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">AI Stylist</h3>
+            <p style="font-size: 0.85rem;">Get personalized curation and bundles from Antigravity.</p>
+          </div>
+        </div>
+        
+        <button class="btn" style="background:var(--gold); color:white; font-size: 1.3rem; padding: 1.2rem 3rem;" onclick="activatePlus()">
+          Upgrade Now - GH₵ 49.99 / Month ✨
+        </button>
+        <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-light);">* Cancel anytime. New features added weekly.</p>
+      </div>
+    </section>
+
+    <!-- ── Contact Section ── -->
+    <section id="contact" style="background: var(--white); padding: 5rem 1.5rem;">
+      <div class="container" style="max-width: 600px;">
+        <h2 class="text-center">Have a Question? 💌</h2>
+        <p class="text-center mb-5">Whether it's a custom order or just a hello, we'd love to hear from you!</p>
+        
+        <form id="contactForm" onsubmit="handleContact(event)" style="display: flex; flex-direction: column; gap: 1.2rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <input type="text" id="c-name" placeholder="Name" required style="padding: 1rem; border: 2px solid var(--pink-light); border-radius: 12px; font-family: inherit;">
+            <input type="email" id="c-email" placeholder="Email" required style="padding: 1rem; border: 2px solid var(--pink-light); border-radius: 12px; font-family: inherit;">
+          </div>
+          <textarea id="c-message" rows="5" placeholder="Your Message..." required style="padding: 1rem; border: 2px solid var(--pink-light); border-radius: 12px; font-family: inherit; resize: none;"></textarea>
+          <button type="submit" class="btn" style="width: 100%; font-size: 1.1rem;">Send Message ✨</button>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+    <span>© 2026 BunBabe.</span> All rights reserved. Made with 💗
+  </footer>
+
+  <script>
+    function handleContact(e) {
+      e.preventDefault();
+      const msg = {
+        name: document.getElementById('c-name').value,
+        email: document.getElementById('c-email').value,
+        message: document.getElementById('c-message').value,
+        date: new Date().toISOString()
+      };
+      
+      const msgs = JSON.parse(localStorage.getItem('bb_messages') || '[]');
+      msgs.push(msg);
+      localStorage.setItem('bb_messages', JSON.stringify(msgs));
+      
+      showToast("Message sent! We'll stay in touch. 🎀");
+      document.getElementById('contactForm').reset();
+    }
+
+    function showToast(m) {
+      const t = document.getElementById('toast');
+      t.innerText = m;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    // Drop Timer Logic
+    function startDropTimer() {
+      const display = document.getElementById('drop-timer');
+      let targetTime = localStorage.getItem('bunbabe_drop_target');
+      const now = new Date().getTime();
+      
+      // Set new timer if none exists or if the old one expired
+      if (!targetTime || parseInt(targetTime) < now) {
+          targetTime = now + (14400 * 1000); // 4 hours in milliseconds
+          localStorage.setItem('bunbabe_drop_target', targetTime);
+      }
+      
+      setInterval(() => {
+        const currentTime = new Date().getTime();
+        let timeLeft = Math.floor((parseInt(targetTime) - currentTime) / 1000);
+        
+        if (timeLeft < 0) timeLeft = 0;
+
+        const h = Math.floor(timeLeft / 3600);
+        const m = Math.floor((timeLeft % 3600) / 60);
+        const s = timeLeft % 60;
+        display.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      }, 1000);
+    }
+    window.addEventListener('scroll', () => {}); // placeholder
+    startDropTimer();
+  </script>
+
+    <script src="db.js"></script>
+    <script src="cart.js"></script>
+    <script src="features.js"></script>
+
+    <!-- Floating Antigravity Bubble -->
+    <div id="antigravity-bubble" onclick="window.location.href='admin.html#sec-ai'" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; background:#3a2535; border:3px solid var(--pink); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; cursor:pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index:1000; transition:all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        🛸
+    </div>
+    <style>#antigravity-bubble:hover { transform: scale(1.1) rotate(15deg); }</style>
+
+    <!-- Floating Spin Button -->
+    <style>
+    .spin-float-btn {
+        position: fixed; bottom: 100px; right: 28px;
+        background: linear-gradient(135deg, #ff4757, #ff6b81);
+        color: #fff; border: none; border-radius: 50px;
+        padding: 0.7rem 1.2rem; font-family: 'Nunito', sans-serif;
+        font-weight: 900; font-size: 0.85rem; cursor: pointer;
+        box-shadow: 0 6px 24px rgba(255,71,87,0.4);
+        z-index: 1999; text-decoration: none;
+        animation: spinBtnPulse 2.5s ease-in-out infinite;
+        display: flex; align-items: center; gap: 0.4rem;
+    }
+    @keyframes spinBtnPulse {
+        0%,100% { transform: scale(1); }
+        50% { transform: scale(1.06); }
+    }
+    </style>
+    <a href="spin.html" class="spin-float-btn">🎡 Spin & Win</a>
+
+  <!-- ── Cart Drawer ── -->
+  <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+  <div id="cartDrawer" class="cart-drawer">
+    <div class="cart-header">
+      <h3>Your Cart 🛍️</h3>
+      <span class="cart-close" onclick="closeCart()">&times;</span>
+    </div>
+    <div id="cartItems" class="cart-items">
+      <!-- Items injected by JS -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-summary">
+        <span>Total:</span>
+        <span id="cartTotal">GH₵ 0</span>
+      </div>
+      <button class="btn cart-checkout-btn" onclick="checkout()">Proceed to Checkout ✨</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast"
+    style="display:none; position:fixed; bottom:20px; right:20px; background:var(--pink-dark); color:white; padding:15px 25px; border-radius:12px; font-weight:700; z-index:2000; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js');
+      });
+    }
+  </script>
+</body>
+
+</html>
